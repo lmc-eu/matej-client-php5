@@ -10,7 +10,7 @@ use Lmc\Matej\Model\Request;
 
 class EventsRequestBuilder extends AbstractRequestBuilder
 {
-    protected const ENDPOINT_PATH = '/events';
+    const ENDPOINT_PATH = '/events';
     /** @var AbstractCommand[] */
     protected $commands = [];
 

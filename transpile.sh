@@ -11,6 +11,11 @@ git clone git@github.com:lmc-eu/matej-client-php.git tmp-7/
 vendor/bin/php7to5 convert tmp-7/src/ tmp-5/src
 vendor/bin/php7to5 convert tmp-7/tests/ tmp-5/tests
 
+for FN in $(find tmp-5/ -type f -name "*.php"); do
+    # Remove class constants visibility, see https://github.com/spatie/7to5/issues/30
+    sed -i -- "s/\(protected\|private\|public\) const/const/g" $FN
+done
+
 # Copy non-php fixtures from tests
 for FN in $(find tmp-7/tests/ -type f -not -name "*.php"); do
     RELATIVE_PATH=$(echo $FN | sed s~tmp-7/~~)
