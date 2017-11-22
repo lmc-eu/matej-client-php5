@@ -6,7 +6,7 @@ use Fig\Http\Message\StatusCodeInterface;
 use GuzzleHttp\Psr7\Response;
 use Lmc\Matej\Exception\ResponseDecodingException;
 use Lmc\Matej\Model\CommandResponse;
-use PHPUnit\Framework\TestCase;
+use Lmc\Matej\TestCase;
 
 class ResponseDecoderTest extends TestCase
 {
@@ -27,6 +27,7 @@ class ResponseDecoderTest extends TestCase
         $this->assertSame(1, $output->getNumberOfCommands());
         $this->assertSame(1, $output->getNumberOfSuccessfulCommands());
         $this->assertSame(0, $output->getNumberOfFailedCommands());
+        $this->assertSame(0, $output->getNumberOfSkippedCommands());
         $commandResponses = $output->getCommandResponses();
         $this->assertCount(1, $commandResponses);
         $this->assertInstanceOf(CommandResponse::class, $commandResponses[0]);
@@ -41,6 +42,7 @@ class ResponseDecoderTest extends TestCase
         $this->assertSame(3, $output->getNumberOfCommands());
         $this->assertSame(2, $output->getNumberOfSuccessfulCommands());
         $this->assertSame(1, $output->getNumberOfFailedCommands());
+        $this->assertSame(0, $output->getNumberOfSkippedCommands());
         $commandResponses = $output->getCommandResponses();
         $this->assertCount(3, $commandResponses);
         $this->assertContainsOnlyInstancesOf(CommandResponse::class, $commandResponses);
@@ -61,11 +63,14 @@ class ResponseDecoderTest extends TestCase
         $this->decoder->decode($response);
     }
 
-    private function createJsonResponseFromFile($fileName)
+    /** @test */
+    public function shouldThrowExceptionWhenJsonWithInvalidDataIsDecoded()
     {
-        $jsonData = file_get_contents($fileName);
-        $response = new Response(StatusCodeInterface::STATUS_OK, ['Content-Type' => 'application/json'], $jsonData);
-
-        return $response;
+        $notJsonData = file_get_contents(__DIR__ . '/Fixtures/invalid-response-format.json');
+        $response = new Response(StatusCodeInterface::STATUS_NOT_FOUND, [], $notJsonData);
+        $this->expectException(ResponseDecodingException::class);
+        $this->expectExceptionMessage('Error decoding Matej response: required data missing.');
+        $this->expectExceptionMessage('"invalid": [],');
+        $this->decoder->decode($response);
     }
 }

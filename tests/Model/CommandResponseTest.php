@@ -3,7 +3,7 @@
 namespace Lmc\Matej\Model;
 
 use Lmc\Matej\Exception\InvalidDomainModelArgumentException;
-use PHPUnit\Framework\TestCase;
+use Lmc\Matej\TestCase;
 
 class CommandResponseTest extends TestCase
 {

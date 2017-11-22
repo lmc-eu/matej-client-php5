@@ -13,4 +13,9 @@ class ResponseDecodingException extends AbstractMatejException
     {
         return new self(sprintf("Error decoding Matej response: %s\n\nStatus code: %s %s\nBody:\n%s", $jsonErrorMsg, $response->getStatusCode(), $response->getReasonPhrase(), $response->getBody()));
     }
+
+    public static function forInvalidData(ResponseInterface $response)
+    {
+        return new self(sprintf("Error decoding Matej response: required data missing.\n\nBody:\n%s", $response->getBody()));
+    }
 }
