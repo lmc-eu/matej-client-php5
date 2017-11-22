@@ -9,7 +9,7 @@ use Lmc\Matej\Model\Request;
 
 class ItemPropertiesSetupRequestBuilder extends AbstractRequestBuilder
 {
-    protected const ENDPOINT_PATH = '/item-properties';
+    const ENDPOINT_PATH = '/item-properties';
     /** @var ItemPropertySetup[] */
     protected $commands = [];
     /** @var bool */
