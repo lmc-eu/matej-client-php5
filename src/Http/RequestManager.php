@@ -3,12 +3,14 @@
 namespace Lmc\Matej\Http;
 
 use Http\Client\Common\Plugin\AuthenticationPlugin;
+use Http\Client\Common\Plugin\HeaderSetPlugin;
 use Http\Client\Common\PluginClient;
 use Http\Client\HttpClient;
 use Http\Discovery\HttpClientDiscovery;
 use Http\Discovery\MessageFactoryDiscovery;
 use Http\Message\MessageFactory;
 use Lmc\Matej\Http\Plugin\ExceptionPlugin;
+use Lmc\Matej\Matej;
 use Lmc\Matej\Model\Request;
 use Lmc\Matej\Model\Response;
 
@@ -18,6 +20,7 @@ use Lmc\Matej\Model\Response;
  */
 class RequestManager
 {
+    const CLIENT_VERSION_HEADER = 'Matej-Client-Version';
     /** @var string */
     protected $accountId;
     /** @var string */
@@ -93,7 +96,7 @@ class RequestManager
 
     protected function createConfiguredHttpClient()
     {
-        return new PluginClient($this->getHttpClient(), [new AuthenticationPlugin(new HmacAuthentication($this->apiKey)), new ExceptionPlugin()]);
+        return new PluginClient($this->getHttpClient(), [new HeaderSetPlugin($this->getDefaultHeaders()), new AuthenticationPlugin(new HmacAuthentication($this->apiKey)), new ExceptionPlugin()]);
     }
 
     protected function createHttpRequestFromMatejRequest(Request $request)
@@ -107,5 +110,10 @@ class RequestManager
     protected function buildBaseUrl()
     {
         return sprintf('https://%s.matej.lmc.cz', $this->accountId);
+    }
+
+    private function getDefaultHeaders()
+    {
+        return [self::CLIENT_VERSION_HEADER => Matej::CLIENT_ID . '/' . Matej::VERSION];
     }
 }

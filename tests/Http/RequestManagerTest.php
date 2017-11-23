@@ -4,6 +4,7 @@ namespace Lmc\Matej\Http;
 
 use Fig\Http\Message\RequestMethodInterface;
 use Http\Mock\Client;
+use Lmc\Matej\Matej;
 use Lmc\Matej\Model\Request;
 use Lmc\Matej\Model\Response;
 use Lmc\Matej\TestCase;
@@ -37,5 +38,6 @@ class RequestManagerTest extends TestCase
         $this->assertSame(RequestMethodInterface::METHOD_PUT, $recordedRequests[0]->getMethod());
         $this->assertJsonStringEqualsJsonString('{"foo":"bar","list":{"lorem":"ipsum","dolor":333}}', $recordedRequests[0]->getBody()->__toString());
         $this->assertSame(['application/json'], $recordedRequests[0]->getHeader('Content-Type'));
+        $this->assertSame('php-client/' . Matej::VERSION, $recordedRequests[0]->getHeader(RequestManager::CLIENT_VERSION_HEADER)[0]);
     }
 }
