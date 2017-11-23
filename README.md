@@ -10,6 +10,12 @@
 - If you still use PHP 5.6, temporarily use this library, but we encourage you to update you PHP as soon as possible - the PHP 5.6 is [no longer actively supported](http://php.net/supported-versions.php) by the PHP Group.
 - This repository is read-only, meaning all pull-requests, issues etc. must be directed to the [main repository][original].
 
+## Installation
+
+Follow steps from the [installation howto][original-installation] of the original library.
+
+The only difference is you install via Composer package `lmc/matej-client-php5` instead of `lmc/matej-client`.
+
 ## Changelog
 Version releases will be synced with [main repository][original].
 
@@ -19,3 +25,4 @@ We follow [Semantic Versioning](http://semver.org/).
 
 [original]: https://github.com/lmc-eu/matej-client-php
 [original-changelog]: https://github.com/lmc-eu/matej-client-php/blob/master/CHANGELOG.md
+[original-installation]: https://github.com/OndraM/matej-client-php#installation
