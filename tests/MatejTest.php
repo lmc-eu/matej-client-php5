@@ -14,7 +14,7 @@ class MatejTest extends TestCase
     /** @test */
     public function shouldBeInstantiable()
     {
-        $matej = new Matej('accountId', 'apiKey');
+        $matej = new Matej('account-id', 'apiKey');
         $this->assertInstanceOf(Matej::class, $matej);
     }
 
@@ -24,11 +24,11 @@ class MatejTest extends TestCase
         $dummyHttpResponse = $this->createJsonResponseFromFile(__DIR__ . '/Http/Fixtures/response-one-successful-command.json');
         $mockClient = new Client();
         $mockClient->addResponse($dummyHttpResponse);
-        $matej = new Matej('accountId', 'apiKey');
+        $matej = new Matej('account-id', 'apiKey');
         $matej->setHttpClient($mockClient);
         $response = $matej->request()->setupItemProperties()->addProperty(ItemPropertySetup::timestamp('valid_from'))->send();
         $this->assertCount(1, $mockClient->getRequests());
-        $this->assertStringStartsWith('https://accountid.matej.lmc.cz/', $mockClient->getRequests()[0]->getUri()->__toString());
+        $this->assertStringStartsWith('https://account-id.matej.lmc.cz/', $mockClient->getRequests()[0]->getUri()->__toString());
         $this->assertSame(1, $response->getNumberOfCommands());
         $this->assertSame(1, $response->getNumberOfSuccessfulCommands());
         $this->assertSame(0, $response->getNumberOfSkippedCommands());
