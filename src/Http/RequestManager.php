@@ -22,6 +22,8 @@ class RequestManager
 {
     const CLIENT_VERSION_HEADER = 'Matej-Client-Version';
     /** @var string */
+    private $baseUrl = 'https://%s.matej.lmc.cz';
+    /** @var string */
     protected $accountId;
     /** @var string */
     protected $apiKey;
@@ -63,6 +65,12 @@ class RequestManager
     public function setResponseDecoder(ResponseDecoderInterface $responseDecoder)
     {
         $this->responseDecoder = $responseDecoder;
+    }
+
+    /** @codeCoverageIgnore */
+    public function setBaseUrl($baseUrl)
+    {
+        $this->baseUrl = $baseUrl;
     }
 
     protected function getHttpClient()
@@ -109,7 +117,7 @@ class RequestManager
 
     protected function buildBaseUrl()
     {
-        return sprintf('https://%s.matej.lmc.cz', $this->accountId);
+        return sprintf($this->baseUrl, $this->accountId);
     }
 
     private function getDefaultHeaders()

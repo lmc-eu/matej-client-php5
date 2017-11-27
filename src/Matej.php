@@ -11,7 +11,7 @@ use Lmc\Matej\RequestBuilder\RequestBuilderFactory;
 class Matej
 {
     const CLIENT_ID = 'php5-client';
-    const VERSION = '0.0.1';
+    const VERSION = '0.9.0';
     /** @var string */
     private $accountId;
     /** @var string */
@@ -34,6 +34,14 @@ class Matej
     public function setHttpClient(HttpClient $client)
     {
         $this->getRequestManager()->setHttpClient($client);
+
+        return $this;
+    }
+
+    /** @internal used mainly in integration tests */
+    public function setBaseUrl($baseUrl)
+    {
+        $this->getRequestManager()->setBaseUrl($baseUrl);
 
         return $this;
     }

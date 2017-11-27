@@ -5,11 +5,17 @@ namespace Lmc\Matej\RequestBuilder;
 use Fig\Http\Message\RequestMethodInterface;
 use Lmc\Matej\Exception\LogicException;
 use Lmc\Matej\Http\RequestManager;
+use Lmc\Matej\Model\Command\Interaction;
 use Lmc\Matej\Model\Command\ItemProperty;
+use Lmc\Matej\Model\Command\UserMerge;
 use Lmc\Matej\Model\Request;
 use Lmc\Matej\Model\Response;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \Lmc\Matej\RequestBuilder\EventsRequestBuilder
+ * @covers \Lmc\Matej\RequestBuilder\AbstractRequestBuilder
+ */
 class EventsRequestBuilderTest extends TestCase
 {
     /** @test */
@@ -25,19 +31,36 @@ class EventsRequestBuilderTest extends TestCase
     public function shouldBuildRequestWithCommands()
     {
         $builder = new EventsRequestBuilder();
-        $command1 = ItemProperty::create('id-1', ['key1' => 'value1']);
-        $command2 = ItemProperty::create('id-2', ['key1' => 'value3']);
-        $command3 = ItemProperty::create('id-3', ['key1' => 'value3']);
-        $builder->addItemProperty($command1);
-        $builder->addItemProperties([$command2, $command3]);
+        $interactionCommand1 = Interaction::detailView('userId1', 'itemId1');
+        $interactionCommand2 = Interaction::bookmark('userId1', 'itemId1');
+        $interactionCommand3 = Interaction::purchase('userId1', 'itemId1');
+        $builder->addInteraction($interactionCommand1);
+        $builder->addInteractions([$interactionCommand2, $interactionCommand3]);
+        $itemPropertyCommand1 = ItemProperty::create('itemId1', ['key1' => 'value1']);
+        $itemPropertyCommand2 = ItemProperty::create('itemId2', ['key1' => 'value3']);
+        $itemPropertyCommand3 = ItemProperty::create('itemId3', ['key1' => 'value3']);
+        $builder->addItemProperty($itemPropertyCommand1);
+        $builder->addItemProperties([$itemPropertyCommand2, $itemPropertyCommand3]);
+        $userMergeCommand1 = UserMerge::mergeFromSourceToTargetUser('sourceId1', 'targetId1');
+        $userMergeCommand2 = UserMerge::mergeFromSourceToTargetUser('sourceId2', 'targetId2');
+        $userMergeCommand3 = UserMerge::mergeFromSourceToTargetUser('sourceId3', 'targetId3');
+        $builder->addUserMerge($userMergeCommand1);
+        $builder->addUserMerges([$userMergeCommand2, $userMergeCommand3]);
         $request = $builder->build();
         $this->assertInstanceOf(Request::class, $request);
         $this->assertSame(RequestMethodInterface::METHOD_POST, $request->getMethod());
         $this->assertSame('/events', $request->getPath());
-        $this->assertContainsOnlyInstancesOf(ItemProperty::class, $request->getData());
-        $this->assertSame($command1, $request->getData()[0]);
-        $this->assertSame($command2, $request->getData()[1]);
-        $this->assertSame($command3, $request->getData()[2]);
+        $requestData = $request->getData();
+        $this->assertCount(9, $requestData);
+        $this->assertContains($interactionCommand1, $requestData);
+        $this->assertContains($interactionCommand2, $requestData);
+        $this->assertContains($interactionCommand3, $requestData);
+        $this->assertContains($itemPropertyCommand1, $requestData);
+        $this->assertContains($itemPropertyCommand2, $requestData);
+        $this->assertContains($itemPropertyCommand3, $requestData);
+        $this->assertContains($userMergeCommand1, $requestData);
+        $this->assertContains($userMergeCommand2, $requestData);
+        $this->assertContains($userMergeCommand3, $requestData);
     }
 
     /** @test */
@@ -58,6 +81,7 @@ class EventsRequestBuilderTest extends TestCase
         $builder = new EventsRequestBuilder();
         $builder->setRequestManager($requestManagerMock);
         $builder->addItemProperty(ItemProperty::create('id-1', ['key1' => 'value1']));
+        $builder->addUserMerge(UserMerge::mergeFromSourceToTargetUser('sourceId', 'targetId'));
         $builder->send();
     }
 }

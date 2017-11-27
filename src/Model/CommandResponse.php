@@ -12,6 +12,7 @@ class CommandResponse
     const STATUS_OK = 'OK';
     const STATUS_ERROR = 'ERROR';
     const STATUS_SKIPPED = 'SKIPPED';
+    const STATUS_INVALID = 'INVALID';
     /** @var string */
     private $status;
     /** @var string */
@@ -49,5 +50,10 @@ class CommandResponse
     public function getData()
     {
         return $this->data;
+    }
+
+    public function isSuccessful()
+    {
+        return $this->getStatus() === self::STATUS_OK;
     }
 }

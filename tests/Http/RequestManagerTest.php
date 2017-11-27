@@ -38,6 +38,6 @@ class RequestManagerTest extends TestCase
         $this->assertSame(RequestMethodInterface::METHOD_PUT, $recordedRequests[0]->getMethod());
         $this->assertJsonStringEqualsJsonString('{"foo":"bar","list":{"lorem":"ipsum","dolor":333}}', $recordedRequests[0]->getBody()->__toString());
         $this->assertSame(['application/json'], $recordedRequests[0]->getHeader('Content-Type'));
-        $this->assertSame('php5-client/' . Matej::VERSION, $recordedRequests[0]->getHeader(RequestManager::CLIENT_VERSION_HEADER)[0]);
+        $this->assertSame(Matej::CLIENT_ID . '/' . Matej::VERSION, $recordedRequests[0]->getHeader(RequestManager::CLIENT_VERSION_HEADER)[0]);
     }
 }

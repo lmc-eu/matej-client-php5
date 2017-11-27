@@ -5,6 +5,8 @@ namespace Lmc\Matej\RequestBuilder;
 use Lmc\Matej\Http\RequestManager;
 use Lmc\Matej\Model\Command\ItemProperty;
 use Lmc\Matej\Model\Command\ItemPropertySetup;
+use Lmc\Matej\Model\Command\Sorting;
+use Lmc\Matej\Model\Command\UserRecommendation;
 use Lmc\Matej\Model\Request;
 use Lmc\Matej\Model\Response;
 use PHPUnit\Framework\TestCase;
@@ -20,14 +22,15 @@ class RequestBuilderFactoryTest extends TestCase
      * @param mixed $factoryMethod
      * @param mixed $expectedBuilderClass
      * @param \Closure $minimalBuilderInit
+     * @param ... $factoryArguments
      */
-    public function shouldInstantiateBuilderToBuildAndSendRequest($factoryMethod, $expectedBuilderClass, \Closure $minimalBuilderInit)
+    public function shouldInstantiateBuilderToBuildAndSendRequest($factoryMethod, $expectedBuilderClass, \Closure $minimalBuilderInit, ...$factoryArguments)
     {
         $requestManagerMock = $this->createMock(RequestManager::class);
         $requestManagerMock->expects($this->once())->method('sendRequest')->with($this->isInstanceOf(Request::class))->willReturn(new Response(0, 0, 0, 0));
         $factory = new RequestBuilderFactory($requestManagerMock);
         /** @var AbstractRequestBuilder $builder */
-        $builder = $factory->{$factoryMethod}();
+        $builder = $factory->{$factoryMethod}(...$factoryArguments);
         // Builders may require some minimal setup to be able to execute the build() method
         $minimalBuilderInit($builder);
         $this->assertInstanceOf($expectedBuilderClass, $builder);
@@ -47,7 +50,13 @@ class RequestBuilderFactoryTest extends TestCase
         $eventInit = function (EventsRequestBuilder $builder) {
             $builder->addItemProperty(ItemProperty::create('item-id', []));
         };
+        $campaignInit = function (CampaignRequestBuilder $builder) {
+            $builder->addSorting(Sorting::create('item-id', ['item1', 'item2']));
+        };
+        $voidInit = function ($builder) {
+        };
+        $userRecommendation = UserRecommendation::create('user-id', 1, 'test-scenario', 0.5, 3600);
 
-        return [['setupItemProperties', ItemPropertiesSetupRequestBuilder::class, $itemPropertiesSetupInit], ['deleteItemProperties', ItemPropertiesSetupRequestBuilder::class, $itemPropertiesSetupInit], ['events', EventsRequestBuilder::class, $eventInit]];
+        return [['setupItemProperties', ItemPropertiesSetupRequestBuilder::class, $itemPropertiesSetupInit], ['deleteItemProperties', ItemPropertiesSetupRequestBuilder::class, $itemPropertiesSetupInit], ['events', EventsRequestBuilder::class, $eventInit], ['campaign', CampaignRequestBuilder::class, $campaignInit], ['sorting', SortingRequestBuilder::class, $voidInit, Sorting::create('user-a', ['item-a', 'item-b', 'item-c'])], ['recommendation', RecommendationRequestBuilder::class, $voidInit, $userRecommendation]];
     }
 }
