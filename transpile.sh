@@ -26,6 +26,11 @@ done
 # Replace client name constant
 sed -i -- "s/CLIENT_ID = 'php-client'/CLIENT_ID = 'php5-client'/" tmp-5/src/Matej.php
 
+cd tmp-7/
+LATEST_COMMIT_MESSAGE=$(git log -1 --pretty=%s)
+LATEST_TAG=$(git describe --abbrev=0 --tags)
+cd ..
+
 rm -rf tmp-7
 
 # Fix codestyle of the PHP 5 source
@@ -39,3 +44,7 @@ rm -rf tmp-5
 composer all
 
 echo Check the git diff now!
+echo "Suggested commit message:"
+echo "git commit -m \"$LATEST_COMMIT_MESSAGE\""
+echo "Suggested tag message:"
+echo "git tag $LATEST_TAG HEAD"
