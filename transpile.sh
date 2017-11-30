@@ -23,6 +23,9 @@ for FN in $(find tmp-7/tests/ -type f -not -name "*.php"); do
     cp "$FN" "$RELATIVE_PATH";
 done
 
+# Replace client name constant
+sed -i -- "s/CLIENT_ID = 'php-client'/CLIENT_ID = 'php5-client'/" tmp-5/src/Matej.php
+
 rm -rf tmp-7
 
 # Fix codestyle of the PHP 5 source
