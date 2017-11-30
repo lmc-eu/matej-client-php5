@@ -2,6 +2,8 @@
 
 namespace Lmc\Matej\Model\Command;
 
+use Lmc\Matej\Model\Assertion;
+
 /**
  * Deliver personalized recommendations for the given user.
  */
@@ -31,16 +33,11 @@ class UserRecommendation extends AbstractCommand
 
     private function __construct($userId, $count, $scenario, $rotationRate, $rotationTime)
     {
-        $this->userId = $userId;
-        // TODO: assert format
-        $this->count = $count;
-        // TODO: assert greater than 0
-        $this->scenario = $scenario;
-        // TODO: assert format
-        $this->rotationRate = $rotationRate;
-        // TODO: assert value between 0.0 and 1.0
-        $this->rotationTime = $rotationTime;
-        // TODO: assert valid time interval
+        $this->setUserId($userId);
+        $this->setCount($count);
+        $this->setScenario($scenario);
+        $this->setRotationRate($rotationRate);
+        $this->setRotationTime($rotationTime);
     }
 
     /**
@@ -79,7 +76,7 @@ class UserRecommendation extends AbstractCommand
      */
     public function setMinimalRelevance($minimalRelevance)
     {
-        // TODO: assert one of MIN_RELEVANCE_*
+        Assertion::choice($minimalRelevance, [self::MINIMAL_RELEVANCE_LOW, self::MINIMAL_RELEVANCE_MEDIUM, self::MINIMAL_RELEVANCE_HIGH]);
         $this->minimalRelevance = $minimalRelevance;
 
         return $this;
@@ -102,9 +99,45 @@ class UserRecommendation extends AbstractCommand
      */
     public function setFilters(array $filters)
     {
+        Assertion::allString($filters);
         $this->filters = $filters;
 
         return $this;
+    }
+
+    protected function setUserId($userId)
+    {
+        Assertion::typeIdentifier($userId);
+        $this->userId = $userId;
+    }
+
+    protected function setCount($count)
+    {
+        Assertion::greaterThan($count, 0);
+        $this->count = $count;
+    }
+
+    protected function setScenario($scenario)
+    {
+        Assertion::typeIdentifier($scenario);
+        $this->scenario = $scenario;
+    }
+
+    protected function setRotationRate($rotationRate)
+    {
+        Assertion::between($rotationRate, 0, 1);
+        $this->rotationRate = $rotationRate;
+    }
+
+    protected function setRotationTime($rotationTime)
+    {
+        Assertion::greaterThan($rotationTime, 0);
+        $this->rotationTime = $rotationTime;
+    }
+
+    protected function assembleFiltersString()
+    {
+        return implode(' ' . $this->filterOperator . ' ', $this->filters);
     }
 
     protected function getCommandType()
@@ -115,10 +148,5 @@ class UserRecommendation extends AbstractCommand
     protected function getCommandParameters()
     {
         return ['user_id' => $this->userId, 'count' => $this->count, 'scenario' => $this->scenario, 'rotation_rate' => $this->rotationRate, 'rotation_time' => $this->rotationTime, 'hard_rotation' => $this->hardRotation, 'min_relevance' => $this->minimalRelevance, 'filter' => $this->assembleFiltersString()];
-    }
-
-    protected function assembleFiltersString()
-    {
-        return implode(' ' . $this->filterOperator . ' ', $this->filters);
     }
 }

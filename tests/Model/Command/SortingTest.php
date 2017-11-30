@@ -17,7 +17,7 @@ class SortingTest extends TestCase
 
     /**
      * Execute asserts against user merge object
-     * @param object $object
+     * @param Sorting $object
      * @param mixed $userId
      * @param array $itemIds
      */

@@ -2,7 +2,7 @@
 
 namespace Lmc\Matej\Model;
 
-use Lmc\Matej\Exception\InvalidDomainModelArgumentException;
+use Lmc\Matej\Exception\ResponseDecodingException;
 use Lmc\Matej\TestCase;
 
 class ResponseTest extends TestCase
@@ -51,7 +51,7 @@ class ResponseTest extends TestCase
      */
     public function shouldThrowExceptionWhenInconsistentDataProvided($numberOfCommands, $numberOfSuccessful, $numberOfFailed, $numberOfSkipped, array $commandResponses, $expectedExceptionMessage)
     {
-        $this->expectException(InvalidDomainModelArgumentException::class);
+        $this->expectException(ResponseDecodingException::class);
         $this->expectExceptionMessage($expectedExceptionMessage);
         new Response($numberOfCommands, $numberOfSuccessful, $numberOfFailed, $numberOfSkipped, $commandResponses);
     }

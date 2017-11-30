@@ -2,7 +2,7 @@
 
 namespace Lmc\Matej\Model;
 
-use Lmc\Matej\Exception\InvalidDomainModelArgumentException;
+use Lmc\Matej\Exception\ResponseDecodingException;
 
 class Response
 {
@@ -27,11 +27,11 @@ class Response
             $this->commandResponses[] = CommandResponse::createFromRawCommandResponseObject($rawCommandResponse);
         }
         if ($this->numberOfCommands !== count($commandResponses)) {
-            throw InvalidDomainModelArgumentException::forInconsistentNumberOfCommands($this->numberOfCommands, count($commandResponses));
+            throw ResponseDecodingException::forInconsistentNumberOfCommands($this->numberOfCommands, count($commandResponses));
         }
         $commandSum = $this->numberOfSuccessfulCommands + $this->numberOfFailedCommands + $this->numberOfSkippedCommands;
         if ($this->numberOfCommands !== $commandSum) {
-            throw InvalidDomainModelArgumentException::forInconsistentNumbersOfCommandProperties($this->numberOfCommands, $this->numberOfSuccessfulCommands, $this->numberOfFailedCommands, $this->numberOfSkippedCommands);
+            throw ResponseDecodingException::forInconsistentNumbersOfCommandProperties($this->numberOfCommands, $this->numberOfSuccessfulCommands, $this->numberOfFailedCommands, $this->numberOfSkippedCommands);
         }
     }
 

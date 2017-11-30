@@ -2,6 +2,8 @@
 
 namespace Lmc\Matej\Model\Command;
 
+use Lmc\Matej\Model\Assertion;
+
 /**
  * Interaction command allows to send one interaction between a user and item.
  * When given user or item identifier is unknown, Matej will create such user or item respectively.
@@ -28,17 +30,11 @@ class Interaction extends AbstractCommand
     private function __construct($interactionType, $userId, $itemId, $value = 1.0, $context = 'default', $timestamp = null)
     {
         $this->interactionType = $interactionType;
-        // TODO: assert one of INTERACTION_TYPE_*
-        $this->userId = $userId;
-        // TODO: assert format
-        $this->itemId = $itemId;
-        // TODO: assert format
-        $this->value = $value;
-        // TODO: assert value between 0-1
-        $this->context = $context;
-        // TODO: assert format
-        $this->timestamp = $timestamp ?: time();
-        // TODO: assert format
+        $this->setUserId($userId);
+        $this->setItemId($itemId);
+        $this->setValue($value);
+        $this->setContext($context);
+        $this->setTimestamp(isset($timestamp) ? $timestamp : time());
     }
 
     /**
@@ -112,5 +108,35 @@ class Interaction extends AbstractCommand
     public function getCommandParameters()
     {
         return ['interaction_type' => $this->interactionType, 'user_id' => $this->userId, 'item_id' => $this->itemId, 'timestamp' => $this->timestamp, 'value' => $this->value, 'context' => $this->context];
+    }
+
+    protected function setUserId($userId)
+    {
+        Assertion::typeIdentifier($userId);
+        $this->userId = $userId;
+    }
+
+    protected function setItemId($itemId)
+    {
+        Assertion::typeIdentifier($itemId);
+        $this->itemId = $itemId;
+    }
+
+    protected function setValue($value)
+    {
+        Assertion::between($value, 0, 1);
+        $this->value = $value;
+    }
+
+    protected function setContext($context)
+    {
+        Assertion::typeIdentifier($context);
+        $this->context = $context;
+    }
+
+    protected function setTimestamp($timestamp)
+    {
+        Assertion::greaterThan($timestamp, 0);
+        $this->timestamp = $timestamp;
     }
 }

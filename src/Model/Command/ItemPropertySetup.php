@@ -2,6 +2,8 @@
 
 namespace Lmc\Matej\Model\Command;
 
+use Lmc\Matej\Model\Assertion;
+
 /**
  * Command to add or delete item property in the database.
  */
@@ -20,9 +22,7 @@ class ItemPropertySetup extends AbstractCommand
 
     private function __construct($propertyName, $propertyType)
     {
-        // TODO: assert propertyName format
-        // TODO: assert propertyType is one of PROPERTY_TYPE_*
-        $this->propertyName = $propertyName;
+        $this->setPropertyName($propertyName);
         $this->propertyType = $propertyType;
     }
 
@@ -54,6 +54,12 @@ class ItemPropertySetup extends AbstractCommand
     public static function set($propertyName)
     {
         return new static($propertyName, self::PROPERTY_TYPE_SET);
+    }
+
+    protected function setPropertyName($propertyName)
+    {
+        Assertion::typeIdentifier($propertyName);
+        $this->propertyName = $propertyName;
     }
 
     protected function getCommandType()

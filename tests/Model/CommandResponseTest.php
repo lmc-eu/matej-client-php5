@@ -2,7 +2,7 @@
 
 namespace Lmc\Matej\Model;
 
-use Lmc\Matej\Exception\InvalidDomainModelArgumentException;
+use Lmc\Matej\Exception\ResponseDecodingException;
 use Lmc\Matej\TestCase;
 
 class CommandResponseTest extends TestCase
@@ -55,7 +55,7 @@ class CommandResponseTest extends TestCase
     /** @test */
     public function shouldThrowExceptionIfStatusIsMissing()
     {
-        $this->expectException(InvalidDomainModelArgumentException::class);
+        $this->expectException(ResponseDecodingException::class);
         $this->expectExceptionMessage('Status field is missing in command response object');
         CommandResponse::createFromRawCommandResponseObject((object) ['message' => 'Foo', 'data' => [['bar']]]);
     }
