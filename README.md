@@ -4,10 +4,10 @@
 [![Travis Build Status](https://img.shields.io/travis/lmc-eu/matej-client-php5/master.svg?style=flat-square)](https://travis-ci.org/lmc-eu/matej-client-php5)
 [![Coverage Status](https://img.shields.io/coveralls/lmc-eu/matej-client-php5/master.svg?style=flat-square)](https://coveralls.io/r/lmc-eu/matej-client-php5?branch=master)
 
-**Please note the PHP 5.6 version is transpilled from [PHP 7.1 version][original] of the client. So:**
+**Please note the PHP 5.6 version is transpiled from [PHP 7.1+ version][original] of the client. So:**
 
 - If you use PHP 7.1+, use the [original library][original]. 
-- If you still use PHP 5.6, temporarily use this library, but we encourage you to update you PHP as soon as possible - the PHP 5.6 is [no longer actively supported](http://php.net/supported-versions.php) by the PHP Group.
+- If you still use PHP 5.6, temporarily use this library, but we encourage you to update PHP as soon as possible - the PHP 5.6 is [no longer actively supported](http://php.net/supported-versions.php) by the PHP Group.
 - This repository is read-only, meaning all pull-requests, issues etc. must be directed to the [main repository][original].
 
 ## Installation
@@ -17,7 +17,7 @@ Follow steps from the [installation howto][original-installation] of the origina
 The only difference is you install via Composer package `lmc/matej-client-php5` instead of `lmc/matej-client`.
 
 ## Changelog
-Version releases will be synced with [main repository][original].
+Version releases will be synced with [the main repository][original].
 
 For latest changes refer to [CHANGELOG.md][original-changelog] of the PHP 7.1 repository. 
 
