@@ -17,7 +17,7 @@ class ItemProperty extends AbstractCommand
     private function __construct($itemId, array $properties)
     {
         $this->setItemId($itemId);
-        $this->properties = $properties;
+        $this->setProperties($properties);
     }
 
     public static function create($itemId, array $properties = [])
@@ -29,6 +29,12 @@ class ItemProperty extends AbstractCommand
     {
         Assertion::typeIdentifier($itemId);
         $this->itemId = $itemId;
+    }
+
+    protected function setProperties(array $properties)
+    {
+        Assertion::keyNotExists($properties, 'item_id', 'Cannot update value of "item_id" property - it is used by Matej to identify the item and cannot be altered once created.');
+        $this->properties = $properties;
     }
 
     protected function getCommandType()

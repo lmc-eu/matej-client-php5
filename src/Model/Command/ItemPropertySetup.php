@@ -59,6 +59,7 @@ class ItemPropertySetup extends AbstractCommand
     protected function setPropertyName($propertyName)
     {
         Assertion::typeIdentifier($propertyName);
+        Assertion::notEq($propertyName, 'item_id', 'Cannot manipulate with property "item_id" - it is used by Matej to identify items.');
         $this->propertyName = $propertyName;
     }
 
