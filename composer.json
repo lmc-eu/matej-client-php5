@@ -28,10 +28,11 @@
         "php-http/discovery": "^1.0",
         "fig/http-message-util": "^1.1",
         "php-http/client-common": "^1.6",
-        "beberlei/assert": "^2.8"
+        "beberlei/assert": "^2.8",
+        "ramsey/uuid": "^3.7"
     },
     "require-dev": {
-        "php-http/guzzle6-adapter": "^1.1",
+        "php-http/guzzle6-adapter": "^1.1.1",
         "php-http/mock-client": "^1.0",
         "php-http/message": "^1.0",
         "phpunit/phpunit": "^5.7 || ^6.4",

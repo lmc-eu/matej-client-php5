@@ -5,6 +5,7 @@ namespace Lmc\Matej\RequestBuilder;
 use Lmc\Matej\Exception\LogicException;
 use Lmc\Matej\Http\RequestManager;
 use Lmc\Matej\Model\Request;
+use Lmc\Matej\Model\Response;
 
 /**
  * Request builders provides methods for simple and type-safe assembly of request to specific Matej endpoint.
@@ -16,6 +17,8 @@ abstract class AbstractRequestBuilder
 {
     /** @var RequestManager */
     protected $requestManager;
+    /** @var string */
+    protected $requestId;
 
     /**
      * Use Commands and other settings which were passed to this builder object to build instance of
@@ -31,6 +34,20 @@ abstract class AbstractRequestBuilder
     public function setRequestManager(RequestManager $requestManager)
     {
         $this->requestManager = $requestManager;
+
+        return $this;
+    }
+
+    /**
+     * Set custom identifier of the request to make it traceable in case of debugging.
+     * The same ID will then also be available in the response.
+     *
+     * @see Response::getResponseId()
+     * @param mixed $requestId
+     */
+    public function setRequestId($requestId)
+    {
+        $this->requestId = $requestId;
 
         return $this;
     }

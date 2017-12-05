@@ -21,6 +21,8 @@ use Lmc\Matej\Model\Response;
 class RequestManager
 {
     const CLIENT_VERSION_HEADER = 'Matej-Client-Version';
+    const REQUEST_ID_HEADER = 'Matej-Request-Id';
+    const RESPONSE_ID_HEADER = 'Matej-Response-Id';
     /** @var string */
     private $baseUrl = 'https://%s.matej.lmc.cz';
     /** @var string */
@@ -112,7 +114,7 @@ class RequestManager
         $requestBody = json_encode($request->getData());
         $uri = $this->buildBaseUrl() . $request->getPath();
 
-        return $this->getMessageFactory()->createRequest($request->getMethod(), $uri, ['Content-Type' => 'application/json'], $requestBody);
+        return $this->getMessageFactory()->createRequest($request->getMethod(), $uri, ['Content-Type' => 'application/json', self::REQUEST_ID_HEADER => $request->getRequestId()], $requestBody);
     }
 
     protected function buildBaseUrl()

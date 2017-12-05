@@ -12,6 +12,7 @@ class UserRecommendationTest extends TestCase
         $command = UserRecommendation::create('user-id', 333, 'test-scenario', 1.0, 3600);
         $this->assertInstanceOf(UserRecommendation::class, $command);
         $this->assertSame(['type' => 'user-based-recommendations', 'parameters' => ['user_id' => 'user-id', 'count' => 333, 'scenario' => 'test-scenario', 'rotation_rate' => 1.0, 'rotation_time' => 3600, 'hard_rotation' => false, 'min_relevance' => UserRecommendation::MINIMAL_RELEVANCE_LOW, 'filter' => 'valid_to >= NOW']], $command->jsonSerialize());
+        $this->assertSame('user-id', $command->getUserId());
     }
 
     /** @test */

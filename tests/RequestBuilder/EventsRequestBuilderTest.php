@@ -46,6 +46,7 @@ class EventsRequestBuilderTest extends TestCase
         $userMergeCommand3 = UserMerge::mergeFromSourceToTargetUser('sourceId3', 'targetId3');
         $builder->addUserMerge($userMergeCommand1);
         $builder->addUserMerges([$userMergeCommand2, $userMergeCommand3]);
+        $builder->setRequestId('custom-request-id-foo');
         $request = $builder->build();
         $this->assertInstanceOf(Request::class, $request);
         $this->assertSame(RequestMethodInterface::METHOD_POST, $request->getMethod());
@@ -61,6 +62,7 @@ class EventsRequestBuilderTest extends TestCase
         $this->assertContains($userMergeCommand1, $requestData);
         $this->assertContains($userMergeCommand2, $requestData);
         $this->assertContains($userMergeCommand3, $requestData);
+        $this->assertSame('custom-request-id-foo', $request->getRequestId());
     }
 
     /** @test */

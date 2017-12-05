@@ -16,13 +16,16 @@ class Response
     private $numberOfFailedCommands;
     /** @var int */
     private $numberOfSkippedCommands;
+    /** @var string|null */
+    private $responseId;
 
-    public function __construct($numberOfCommands, $numberOfSuccessfulCommands, $numberOfFailedCommands, $numberOfSkippedCommands, array $commandResponses = [])
+    public function __construct($numberOfCommands, $numberOfSuccessfulCommands, $numberOfFailedCommands, $numberOfSkippedCommands, array $commandResponses = [], $responseId = null)
     {
         $this->numberOfCommands = $numberOfCommands;
         $this->numberOfSuccessfulCommands = $numberOfSuccessfulCommands;
         $this->numberOfFailedCommands = $numberOfFailedCommands;
         $this->numberOfSkippedCommands = $numberOfSkippedCommands;
+        $this->responseId = $responseId;
         foreach ($commandResponses as $rawCommandResponse) {
             $this->commandResponses[] = CommandResponse::createFromRawCommandResponseObject($rawCommandResponse);
         }
@@ -33,6 +36,7 @@ class Response
         if ($this->numberOfCommands !== $commandSum) {
             throw ResponseDecodingException::forInconsistentNumbersOfCommandProperties($this->numberOfCommands, $this->numberOfSuccessfulCommands, $this->numberOfFailedCommands, $this->numberOfSkippedCommands);
         }
+        $this->responseId = $responseId;
     }
 
     public function getNumberOfCommands()
@@ -64,5 +68,10 @@ class Response
     public function getCommandResponses()
     {
         return $this->commandResponses;
+    }
+
+    public function getResponseId()
+    {
+        return $this->responseId;
     }
 }

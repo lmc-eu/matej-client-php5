@@ -15,6 +15,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @covers \Lmc\Matej\RequestBuilder\SortingRequestBuilder
  * @covers \Lmc\Matej\RequestBuilder\AbstractRequestBuilder
+ * @covers \Lmc\Matej\Exception\LogicException
  */
 class SortingRequestBuilderTest extends TestCase
 {
@@ -25,8 +26,9 @@ class SortingRequestBuilderTest extends TestCase
         $builder = new SortingRequestBuilder($sortingCommand);
         $interactionCommand = Interaction::detailView('userId1', 'itemId1');
         $builder->setInteraction($interactionCommand);
-        $userMergeCommand = UserMerge::mergeFromSourceToTargetUser('sourceId1', 'targetId1');
+        $userMergeCommand = UserMerge::mergeFromSourceToTargetUser('sourceId1', 'userId1');
         $builder->setUserMerge($userMergeCommand);
+        $builder->setRequestId('custom-request-id-foo');
         $request = $builder->build();
         $this->assertInstanceOf(Request::class, $request);
         $this->assertSame(RequestMethodInterface::METHOD_POST, $request->getMethod());
@@ -36,6 +38,7 @@ class SortingRequestBuilderTest extends TestCase
         $this->assertSame($interactionCommand, $requestData[0]);
         $this->assertSame($userMergeCommand, $requestData[1]);
         $this->assertSame($sortingCommand, $requestData[2]);
+        $this->assertSame('custom-request-id-foo', $request->getRequestId());
     }
 
     /** @test */
@@ -55,5 +58,25 @@ class SortingRequestBuilderTest extends TestCase
         $builder = new SortingRequestBuilder(Sorting::create('userId1', ['itemId1', 'itemId2']));
         $builder->setRequestManager($requestManagerMock);
         $builder->send();
+    }
+
+    /** @test */
+    public function shouldThrowExceptionWhenUserOfInteractionDiffersFromSorting()
+    {
+        $builder = new SortingRequestBuilder(Sorting::create('userId1', ['itemId1', 'itemId2']));
+        $builder->setInteraction(Interaction::purchase('different-user', 'itemId1'));
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage('User in Interaction command ("different-user") must be the same as user in Sorting command ("userId1")');
+        $builder->build();
+    }
+
+    /** @test */
+    public function shouldThrowExceptionWhenUserOfUserMergeDiffersFromSorting()
+    {
+        $builder = new SortingRequestBuilder(Sorting::create('userId1', ['itemId1', 'itemId2']));
+        $builder->setUserMerge(UserMerge::mergeInto('different-user', 'userId1'));
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage('User in UserMerge command ("different-user") must be the same as user in Sorting command ("userId1")');
+        $builder->build();
     }
 }

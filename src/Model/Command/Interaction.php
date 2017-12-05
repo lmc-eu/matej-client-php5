@@ -8,7 +8,7 @@ use Lmc\Matej\Model\Assertion;
  * Interaction command allows to send one interaction between a user and item.
  * When given user or item identifier is unknown, Matej will create such user or item respectively.
  */
-class Interaction extends AbstractCommand
+class Interaction extends AbstractCommand implements UserAwareInterface
 {
     const INTERACTION_TYPE_DETAILVIEWS = 'detailviews';
     const INTERACTION_TYPE_PURCHASES = 'purchases';
@@ -98,6 +98,11 @@ class Interaction extends AbstractCommand
     public static function rating($userId, $itemId, $value = 1.0, $context = 'default', $timestamp = null)
     {
         return new static(self::INTERACTION_TYPE_RATINGS, $userId, $itemId, $value, $context, $timestamp);
+    }
+
+    public function getUserId()
+    {
+        return $this->userId;
     }
 
     public function getCommandType()

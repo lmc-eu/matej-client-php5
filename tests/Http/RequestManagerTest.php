@@ -27,7 +27,7 @@ class RequestManagerTest extends TestCase
         $mockClient->addResponse($dummyHttpResponse);
         $requestManager = new RequestManager('account-id', 'api-key');
         $requestManager->setHttpClient($mockClient);
-        $request = new Request('/foo/endpoint', RequestMethodInterface::METHOD_PUT, ['foo' => 'bar', 'list' => ['lorem' => 'ipsum', 'dolor' => 333]]);
+        $request = new Request('/foo/endpoint', RequestMethodInterface::METHOD_PUT, ['foo' => 'bar', 'list' => ['lorem' => 'ipsum', 'dolor' => 333]], 'custom-request-id');
         $matejResponse = $requestManager->sendRequest($request);
         // Request should be decoded to Matej Response; decoding itself is comprehensively tested in ResponseDecoderTest
         $this->assertInstanceOf(Response::class, $matejResponse);
@@ -38,6 +38,7 @@ class RequestManagerTest extends TestCase
         $this->assertSame(RequestMethodInterface::METHOD_PUT, $recordedRequests[0]->getMethod());
         $this->assertJsonStringEqualsJsonString('{"foo":"bar","list":{"lorem":"ipsum","dolor":333}}', $recordedRequests[0]->getBody()->__toString());
         $this->assertSame(['application/json'], $recordedRequests[0]->getHeader('Content-Type'));
+        $this->assertSame(['custom-request-id'], $recordedRequests[0]->getHeader(RequestManager::REQUEST_ID_HEADER));
         $this->assertSame(Matej::CLIENT_ID . '/' . Matej::VERSION, $recordedRequests[0]->getHeader(RequestManager::CLIENT_VERSION_HEADER)[0]);
     }
 }
