@@ -8,7 +8,7 @@ use Psr\Http\Message\ResponseInterface;
 
 class ResponseDecoder implements ResponseDecoderInterface
 {
-    public function decode(ResponseInterface $httpResponse)
+    public function decode(ResponseInterface $httpResponse, $responseClass = Response::class)
     {
         $responseData = json_decode($httpResponse->getBody()->getContents());
         if (json_last_error() !== JSON_ERROR_NONE) {
@@ -19,7 +19,7 @@ class ResponseDecoder implements ResponseDecoderInterface
         }
         $responseId = isset($httpResponse->getHeader(RequestManager::RESPONSE_ID_HEADER)[0]) ? $httpResponse->getHeader(RequestManager::RESPONSE_ID_HEADER)[0] : null;
 
-        return new Response((int) $responseData->commands->number_of_commands, (int) $responseData->commands->number_of_successful_commands, (int) $responseData->commands->number_of_failed_commands, (int) $responseData->commands->number_of_skipped_commands, $responseData->commands->responses, $responseId);
+        return new $responseClass((int) $responseData->commands->number_of_commands, (int) $responseData->commands->number_of_successful_commands, (int) $responseData->commands->number_of_failed_commands, (int) $responseData->commands->number_of_skipped_commands, $responseData->commands->responses, $responseId);
     }
 
     private function isResponseValid(\stdClass $responseData)

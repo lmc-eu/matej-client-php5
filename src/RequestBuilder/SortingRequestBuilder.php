@@ -8,7 +8,11 @@ use Lmc\Matej\Model\Command\Interaction;
 use Lmc\Matej\Model\Command\Sorting;
 use Lmc\Matej\Model\Command\UserMerge;
 use Lmc\Matej\Model\Request;
+use Lmc\Matej\Model\Response\SortingResponse;
 
+/**
+ * @method SortingResponse send()
+ */
 class SortingRequestBuilder extends AbstractRequestBuilder
 {
     const ENDPOINT_PATH = '/sorting';
@@ -42,7 +46,7 @@ class SortingRequestBuilder extends AbstractRequestBuilder
     {
         $this->assertConsistentUsersInCommands();
 
-        return new Request(self::ENDPOINT_PATH, RequestMethodInterface::METHOD_POST, [$this->interactionCommand, $this->userMergeCommand, $this->sortingCommand], $this->requestId);
+        return new Request(self::ENDPOINT_PATH, RequestMethodInterface::METHOD_POST, [$this->interactionCommand, $this->userMergeCommand, $this->sortingCommand], $this->requestId, SortingResponse::class);
     }
 
     private function assertConsistentUsersInCommands()

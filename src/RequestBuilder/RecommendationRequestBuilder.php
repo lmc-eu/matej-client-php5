@@ -8,7 +8,11 @@ use Lmc\Matej\Model\Command\Interaction;
 use Lmc\Matej\Model\Command\UserMerge;
 use Lmc\Matej\Model\Command\UserRecommendation;
 use Lmc\Matej\Model\Request;
+use Lmc\Matej\Model\Response\RecommendationsResponse;
 
+/**
+ * @method RecommendationsResponse send()
+ */
 class RecommendationRequestBuilder extends AbstractRequestBuilder
 {
     const ENDPOINT_PATH = '/recommendations';
@@ -42,7 +46,7 @@ class RecommendationRequestBuilder extends AbstractRequestBuilder
     {
         $this->assertConsistentUsersInCommands();
 
-        return new Request(self::ENDPOINT_PATH, RequestMethodInterface::METHOD_POST, [$this->interactionCommand, $this->userMergeCommand, $this->userRecommendationCommand], $this->requestId);
+        return new Request(self::ENDPOINT_PATH, RequestMethodInterface::METHOD_POST, [$this->interactionCommand, $this->userMergeCommand, $this->userRecommendationCommand], $this->requestId, RecommendationsResponse::class);
     }
 
     private function assertConsistentUsersInCommands()

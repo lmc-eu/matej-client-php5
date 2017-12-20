@@ -17,7 +17,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Lmc\\Matej\\": "tests/"
+            "Lmc\\Matej\\": "tests/unit/",
+            "Lmc\\Matej\\IntegrationTests\\": "tests/integration/"
         }
     },
     "require": {
@@ -37,7 +38,7 @@
         "php-http/message": "^1.0",
         "phpunit/phpunit": "^5.7 || ^6.4",
         "friendsofphp/php-cs-fixer": "^2.7",
-        "php-coveralls/php-coveralls": "^1.0",
+        "php-coveralls/php-coveralls": "^2.0",
         "symfony/var-dumper": "^3.3",
         "php-mock/php-mock-phpunit": "^1.0 || ^2.0",
         "spatie/7to5": "^1.2",

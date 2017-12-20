@@ -1,0 +1,50 @@
+<?php
+
+namespace Lmc\Matej\IntegrationTests\RequestBuilder;
+
+use Lmc\Matej\IntegrationTests\IntegrationTestCase;
+use Lmc\Matej\Model\Command\Interaction;
+use Lmc\Matej\Model\Command\UserMerge;
+use Lmc\Matej\Model\Command\UserRecommendation;
+use Lmc\Matej\Model\CommandResponse;
+use Lmc\Matej\Model\Response\RecommendationsResponse;
+
+/**
+ * @covers \Lmc\Matej\Model\Response\RecommendationsResponse
+ * @covers \Lmc\Matej\RequestBuilder\RecommendationRequestBuilder
+ */
+class RecommendationRequestBuilderTest extends IntegrationTestCase
+{
+    /** @test */
+    public function shouldExecuteRecommendationRequestOnly()
+    {
+        $response = $this->createMatejInstance()->request()->recommendation($this->createRecommendationCommand())->send();
+        $this->assertInstanceOf(RecommendationsResponse::class, $response);
+        $this->assertResponseCommandStatuses($response, 'SKIPPED', 'SKIPPED', 'OK');
+        $this->assertShorthandResponse($response, 'SKIPPED', 'SKIPPED', 'OK');
+    }
+
+    /** @test */
+    public function shouldExecuteRecommendationRequestWithUserMergeAndInteraction()
+    {
+        $response = $this->createMatejInstance()->request()->recommendation($this->createRecommendationCommand())->setUserMerge(UserMerge::mergeInto('user-a', 'user-b'))->setInteraction(Interaction::bookmark('user-a', 'item-a'))->send();
+        $this->assertInstanceOf(RecommendationsResponse::class, $response);
+        $this->assertResponseCommandStatuses($response, 'OK', 'OK', 'OK');
+        $this->assertShorthandResponse($response, 'OK', 'OK', 'OK');
+    }
+
+    private function createRecommendationCommand()
+    {
+        return UserRecommendation::create('user-a', 5, 'integration-test-scenario', 0.5, 3600);
+    }
+
+    private function assertShorthandResponse(RecommendationsResponse $response, $interactionStatus, $userMergeStatus, $recommendationStatus)
+    {
+        $this->assertInstanceOf(CommandResponse::class, $response->getInteraction());
+        $this->assertInstanceOf(CommandResponse::class, $response->getUserMerge());
+        $this->assertInstanceOf(CommandResponse::class, $response->getRecommendation());
+        $this->assertSame($interactionStatus, $response->getInteraction()->getStatus());
+        $this->assertSame($userMergeStatus, $response->getUserMerge()->getStatus());
+        $this->assertSame($recommendationStatus, $response->getRecommendation()->getStatus());
+    }
+}

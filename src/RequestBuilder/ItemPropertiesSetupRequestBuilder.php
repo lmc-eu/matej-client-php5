@@ -4,6 +4,7 @@ namespace Lmc\Matej\RequestBuilder;
 
 use Fig\Http\Message\RequestMethodInterface;
 use Lmc\Matej\Exception\LogicException;
+use Lmc\Matej\Model\Assertion;
 use Lmc\Matej\Model\Command\ItemPropertySetup;
 use Lmc\Matej\Model\Request;
 
@@ -48,6 +49,7 @@ class ItemPropertiesSetupRequestBuilder extends AbstractRequestBuilder
         if (empty($this->commands)) {
             throw new LogicException('At least one ItemPropertySetup command must be added to the builder before sending the request');
         }
+        Assertion::batchSize($this->commands);
         $method = $this->shouldDelete ? RequestMethodInterface::METHOD_DELETE : RequestMethodInterface::METHOD_PUT;
 
         return new Request(self::ENDPOINT_PATH, $method, $this->commands, $this->requestId);

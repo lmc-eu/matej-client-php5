@@ -17,13 +17,16 @@ class Request
     private $data;
     /** @var string */
     private $requestId;
+    /** @var string */
+    private $responseClass;
 
-    public function __construct($path, $method, array $data, $requestId = null)
+    public function __construct($path, $method, array $data = [], $requestId = null, $responseClass = Response::class)
     {
         $this->path = $path;
         $this->method = $method;
         $this->data = $data;
         $this->requestId = isset($requestId) ? $requestId : Uuid::uuid4()->toString();
+        $this->setResponseClass($responseClass);
     }
 
     public function getPath()
@@ -44,5 +47,18 @@ class Request
     public function getRequestId()
     {
         return $this->requestId;
+    }
+
+    public function getResponseClass()
+    {
+        return $this->responseClass;
+    }
+
+    private function setResponseClass($class)
+    {
+        Assertion::isResponseClass($class);
+        $this->responseClass = $class;
+
+        return $this;
     }
 }
