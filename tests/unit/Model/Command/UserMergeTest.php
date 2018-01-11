@@ -28,5 +28,6 @@ class UserMergeTest extends UnitTestCase
         $this->assertInstanceOf(UserMerge::class, $command);
         $this->assertSame(['type' => 'user-merge', 'parameters' => ['target_user_id' => $targetUserId, 'source_user_id' => $sourceUserId]], $command->jsonSerialize());
         $this->assertSame($targetUserId, $command->getUserId());
+        $this->assertSame($sourceUserId, $command->getSourceUserId());
     }
 }

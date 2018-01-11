@@ -27,7 +27,7 @@ class SortingRequestTest extends IntegrationTestCase
     /** @test */
     public function shouldExecuteSortingRequestWithUserMergeAndInteraction()
     {
-        $response = $this->createMatejInstance()->request()->sorting(Sorting::create('user-a', ['item-a', 'item-b', 'itemC-c']))->setUserMerge(UserMerge::mergeInto('user-a', 'user-b'))->setInteraction(Interaction::bookmark('user-a', 'item-a'))->send();
+        $response = $this->createMatejInstance()->request()->sorting(Sorting::create('user-b', ['item-a', 'item-b', 'itemC-c']))->setUserMerge(UserMerge::mergeInto('user-b', 'user-a'))->setInteraction(Interaction::bookmark('user-a', 'item-a'))->send();
         $this->assertInstanceOf(SortingResponse::class, $response);
         $this->assertResponseCommandStatuses($response, 'OK', 'OK', 'OK');
         $this->assertShorthandResponse($response, 'OK', 'OK', 'OK');

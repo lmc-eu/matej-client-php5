@@ -28,6 +28,7 @@ class SortingRequestBuilder extends AbstractRequestBuilder
         $this->sortingCommand = $sortingCommand;
     }
 
+    /** @return $this */
     public function setUserMerge(UserMerge $merge)
     {
         $this->userMergeCommand = $merge;
@@ -35,6 +36,7 @@ class SortingRequestBuilder extends AbstractRequestBuilder
         return $this;
     }
 
+    /** @return $this */
     public function setInteraction(Interaction $interaction)
     {
         $this->interactionCommand = $interaction;
@@ -44,18 +46,40 @@ class SortingRequestBuilder extends AbstractRequestBuilder
 
     public function build()
     {
-        $this->assertConsistentUsersInCommands();
-
-        return new Request(self::ENDPOINT_PATH, RequestMethodInterface::METHOD_POST, [$this->interactionCommand, $this->userMergeCommand, $this->sortingCommand], $this->requestId, SortingResponse::class);
+        $this->assertInteractionUserId();
+        $this->assertUserMergeUserId();
+        // Build request
+        return new Request(static::ENDPOINT_PATH, RequestMethodInterface::METHOD_POST, [$this->interactionCommand, $this->userMergeCommand, $this->sortingCommand], $this->requestId, SortingResponse::class);
     }
 
-    private function assertConsistentUsersInCommands()
+    /**
+     * Assert that interaction user ids are ok:
+     * - (A,  null,  A)
+     * - (A, A -> ?, ?)
+     */
+    private function assertInteractionUserId()
     {
-        $mainCommandUser = $this->sortingCommand->getUserId();
-        if ($this->interactionCommand !== null && $mainCommandUser !== $this->interactionCommand->getUserId()) {
+        if ($this->interactionCommand === null) {
+            return;
+        }
+        $interactionUserId = $this->interactionCommand->getUserId();
+        // (A, null, A)
+        if ($this->userMergeCommand === null && $interactionUserId !== $this->sortingCommand->getUserId()) {
             throw LogicException::forInconsistentUserId($this->sortingCommand, $this->interactionCommand);
         }
-        if ($this->userMergeCommand !== null && $mainCommandUser !== $this->userMergeCommand->getUserId()) {
+        // (A, A -> ?, ?)
+        if ($this->userMergeCommand !== null && $interactionUserId !== $this->userMergeCommand->getSourceUserId()) {
+            throw LogicException::forInconsistentUserMergeAndInteractionCommand($this->userMergeCommand->getSourceUserId(), $interactionUserId);
+        }
+    }
+
+    /**
+     * Assert user merge id is ok:
+     * (?, ? -> A, A)
+     */
+    private function assertUserMergeUserId()
+    {
+        if ($this->userMergeCommand !== null && $this->userMergeCommand->getUserId() !== $this->sortingCommand->getUserId()) {
             throw LogicException::forInconsistentUserId($this->sortingCommand, $this->userMergeCommand);
         }
     }

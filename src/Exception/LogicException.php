@@ -9,9 +9,17 @@ use Lmc\Matej\Model\Command\UserAwareInterface;
  */
 class LogicException extends \LogicException implements MatejExceptionInterface
 {
+    /** @return static */
     public static function forInconsistentUserId(UserAwareInterface $mainCommand, UserAwareInterface $additionalCommand)
     {
         $message = sprintf('User in %s command ("%s") must be the same as user in %s command ("%s")', (new \ReflectionClass($additionalCommand))->getShortName(), $additionalCommand->getUserId(), (new \ReflectionClass($mainCommand))->getShortName(), $mainCommand->getUserId());
+
+        return new static($message);
+    }
+
+    public static function forInconsistentUserMergeAndInteractionCommand($userMergeId, $interactionUserId)
+    {
+        $message = sprintf('Source user in UserMerge command ("%s") must be the same as user in Interaction command ("%s")', $userMergeId, $interactionUserId);
 
         return new self($message);
     }

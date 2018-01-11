@@ -18,7 +18,7 @@ class RecommendationRequestBuilderTest extends IntegrationTestCase
     /** @test */
     public function shouldExecuteRecommendationRequestOnly()
     {
-        $response = $this->createMatejInstance()->request()->recommendation($this->createRecommendationCommand())->send();
+        $response = $this->createMatejInstance()->request()->recommendation($this->createRecommendationCommand('user-a'))->send();
         $this->assertInstanceOf(RecommendationsResponse::class, $response);
         $this->assertResponseCommandStatuses($response, 'SKIPPED', 'SKIPPED', 'OK');
         $this->assertShorthandResponse($response, 'SKIPPED', 'SKIPPED', 'OK');
@@ -27,15 +27,15 @@ class RecommendationRequestBuilderTest extends IntegrationTestCase
     /** @test */
     public function shouldExecuteRecommendationRequestWithUserMergeAndInteraction()
     {
-        $response = $this->createMatejInstance()->request()->recommendation($this->createRecommendationCommand())->setUserMerge(UserMerge::mergeInto('user-a', 'user-b'))->setInteraction(Interaction::bookmark('user-a', 'item-a'))->send();
+        $response = $this->createMatejInstance()->request()->recommendation($this->createRecommendationCommand('user-b'))->setUserMerge(UserMerge::mergeInto('user-b', 'user-a'))->setInteraction(Interaction::bookmark('user-a', 'item-a'))->send();
         $this->assertInstanceOf(RecommendationsResponse::class, $response);
         $this->assertResponseCommandStatuses($response, 'OK', 'OK', 'OK');
         $this->assertShorthandResponse($response, 'OK', 'OK', 'OK');
     }
 
-    private function createRecommendationCommand()
+    private function createRecommendationCommand($username)
     {
-        return UserRecommendation::create('user-a', 5, 'integration-test-scenario', 0.5, 3600);
+        return UserRecommendation::create($username, 5, 'integration-test-scenario', 0.5, 3600);
     }
 
     private function assertShorthandResponse(RecommendationsResponse $response, $interactionStatus, $userMergeStatus, $recommendationStatus)

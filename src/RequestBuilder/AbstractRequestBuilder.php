@@ -29,7 +29,9 @@ abstract class AbstractRequestBuilder
     /**
      * If instance of RequestManager is injected to this builder object, you can build and send the request directly
      * via send() method of the builder itself.
+     *
      * @param RequestManager $requestManager
+     * @return $this
      */
     public function setRequestManager(RequestManager $requestManager)
     {
@@ -44,6 +46,7 @@ abstract class AbstractRequestBuilder
      *
      * @see Response::getResponseId()
      * @param mixed $requestId
+     * @return $this
      */
     public function setRequestId($requestId)
     {

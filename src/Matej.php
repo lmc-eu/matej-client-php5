@@ -11,7 +11,7 @@ use Lmc\Matej\RequestBuilder\RequestBuilderFactory;
 class Matej
 {
     const CLIENT_ID = 'php5-client';
-    const VERSION = '1.1.0';
+    const VERSION = '1.2.0';
     /** @var string */
     private $accountId;
     /** @var string */
@@ -31,6 +31,7 @@ class Matej
         return new RequestBuilderFactory($this->getRequestManager());
     }
 
+    /** @return $this */
     public function setHttpClient(HttpClient $client)
     {
         $this->getRequestManager()->setHttpClient($client);
@@ -38,7 +39,11 @@ class Matej
         return $this;
     }
 
-    /** @internal used mainly in integration tests */
+    /**
+     * @internal used mainly in integration tests
+     * @param mixed $baseUrl
+     * @return $this
+     */
     public function setBaseUrl($baseUrl)
     {
         $this->getRequestManager()->setBaseUrl($baseUrl);
@@ -46,7 +51,11 @@ class Matej
         return $this;
     }
 
-    /** @codeCoverageIgnore */
+    /**
+     * @codeCoverageIgnore
+     * @param MessageFactory $messageFactory
+     * @return $this
+     */
     public function setHttpMessageFactory(MessageFactory $messageFactory)
     {
         $this->getRequestManager()->setMessageFactory($messageFactory);
@@ -54,7 +63,11 @@ class Matej
         return $this;
     }
 
-    /** @codeCoverageIgnore */
+    /**
+     * @codeCoverageIgnore
+     * @param ResponseDecoderInterface $responseDecoder
+     * @return $this
+     */
     public function setHttpResponseDecoder(ResponseDecoderInterface $responseDecoder)
     {
         $this->getRequestManager()->setResponseDecoder($responseDecoder);

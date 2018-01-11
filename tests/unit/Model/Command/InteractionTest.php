@@ -14,7 +14,7 @@ class InteractionTest extends TestCase
     public function initTimeMock()
     {
         $time = $this->getFunctionMock(__NAMESPACE__, 'time');
-        $time->expects($this->any())->willReturn(self::TIMESTAMP);
+        $time->expects($this->any())->willReturn(static::TIMESTAMP);
     }
 
     /**
@@ -31,7 +31,7 @@ class InteractionTest extends TestCase
         /** @var Interaction $command */
         $command = forward_static_call_array([Interaction::class, $constructorName], $constructorParams);
         $this->assertInstanceOf(Interaction::class, $command);
-        $this->assertSame(['type' => 'interaction', 'parameters' => ['interaction_type' => $expectedInteractionType, 'user_id' => 'exampleUserId', 'item_id' => 'exampleItemId', 'timestamp' => isset($extraConstructorParams[2]) ? $extraConstructorParams[2] : self::TIMESTAMP, 'value' => isset($extraConstructorParams[0]) ? $extraConstructorParams[0] : 1.0, 'context' => isset($extraConstructorParams[1]) ? $extraConstructorParams[1] : 'default']], $command->jsonSerialize());
+        $this->assertSame(['type' => 'interaction', 'parameters' => ['interaction_type' => $expectedInteractionType, 'user_id' => 'exampleUserId', 'item_id' => 'exampleItemId', 'timestamp' => isset($extraConstructorParams[2]) ? $extraConstructorParams[2] : static::TIMESTAMP, 'value' => isset($extraConstructorParams[0]) ? $extraConstructorParams[0] : 1.0, 'context' => isset($extraConstructorParams[1]) ? $extraConstructorParams[1] : 'default']], $command->jsonSerialize());
         $this->assertSame('exampleUserId', $command->getUserId());
     }
 

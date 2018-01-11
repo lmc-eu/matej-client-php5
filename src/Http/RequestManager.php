@@ -114,7 +114,7 @@ class RequestManager
         $requestBody = json_encode($request->getData());
         $uri = $this->buildBaseUrl() . $request->getPath();
 
-        return $this->getMessageFactory()->createRequest($request->getMethod(), $uri, ['Content-Type' => 'application/json', self::REQUEST_ID_HEADER => $request->getRequestId()], $requestBody);
+        return $this->getMessageFactory()->createRequest($request->getMethod(), $uri, ['Content-Type' => 'application/json', static::REQUEST_ID_HEADER => $request->getRequestId()], $requestBody);
     }
 
     protected function buildBaseUrl()
@@ -124,6 +124,6 @@ class RequestManager
 
     private function getDefaultHeaders()
     {
-        return [self::CLIENT_VERSION_HEADER => Matej::CLIENT_ID . '/' . Matej::VERSION];
+        return [static::CLIENT_VERSION_HEADER => Matej::CLIENT_ID . '/' . Matej::VERSION];
     }
 }

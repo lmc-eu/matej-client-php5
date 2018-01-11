@@ -24,12 +24,13 @@ class CommandResponse
     {
     }
 
+    /** @return static */
     public static function createFromRawCommandResponseObject(\stdClass $rawCommandResponseObject)
     {
         if (!isset($rawCommandResponseObject->status)) {
             throw new ResponseDecodingException('Status field is missing in command response object');
         }
-        $commandResponse = new self();
+        $commandResponse = new static();
         $commandResponse->status = $rawCommandResponseObject->status;
         $commandResponse->message = isset($rawCommandResponseObject->message) ? $rawCommandResponseObject->message : '';
         $commandResponse->data = isset($rawCommandResponseObject->data) ? $rawCommandResponseObject->data : [];
@@ -54,6 +55,6 @@ class CommandResponse
 
     public function isSuccessful()
     {
-        return $this->getStatus() === self::STATUS_OK;
+        return $this->getStatus() === static::STATUS_OK;
     }
 }

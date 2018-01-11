@@ -24,6 +24,7 @@ class ItemPropertiesSetupRequestBuilder extends AbstractRequestBuilder
         $this->shouldDelete = $shouldDelete;
     }
 
+    /** @return $this */
     public function addProperty(ItemPropertySetup $itemPropertySetup)
     {
         $this->commands[] = $itemPropertySetup;
@@ -33,7 +34,7 @@ class ItemPropertiesSetupRequestBuilder extends AbstractRequestBuilder
 
     /**
      * @param ItemPropertySetup[] $itemPropertiesSetup
-     * @return self
+     * @return $this
      */
     public function addProperties(array $itemPropertiesSetup)
     {
@@ -52,6 +53,6 @@ class ItemPropertiesSetupRequestBuilder extends AbstractRequestBuilder
         Assertion::batchSize($this->commands);
         $method = $this->shouldDelete ? RequestMethodInterface::METHOD_DELETE : RequestMethodInterface::METHOD_PUT;
 
-        return new Request(self::ENDPOINT_PATH, $method, $this->commands, $this->requestId);
+        return new Request(static::ENDPOINT_PATH, $method, $this->commands, $this->requestId);
     }
 }

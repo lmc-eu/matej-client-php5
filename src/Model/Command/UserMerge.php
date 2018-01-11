@@ -23,8 +23,10 @@ class UserMerge extends AbstractCommand implements UserAwareInterface
 
     /**
      * Merge source user into target user AND DELETE SOURCE USER.
+     *
      * @param mixed $targetUserId
      * @param mixed $sourceUserIdToBeDeleted
+     * @return static
      */
     public static function mergeInto($targetUserId, $sourceUserIdToBeDeleted)
     {
@@ -33,8 +35,10 @@ class UserMerge extends AbstractCommand implements UserAwareInterface
 
     /**
      * Merge source user into target user AND DELETE SOURCE USER.
+     *
      * @param mixed $sourceUserIdToBeDeleted
      * @param mixed $targetUserId
+     * @return static
      */
     public static function mergeFromSourceToTargetUser($sourceUserIdToBeDeleted, $targetUserId)
     {
@@ -44,6 +48,11 @@ class UserMerge extends AbstractCommand implements UserAwareInterface
     public function getUserId()
     {
         return $this->targetUserId;
+    }
+
+    public function getSourceUserId()
+    {
+        return $this->sourceUserId;
     }
 
     protected function setSourceUserId($sourceUserId)

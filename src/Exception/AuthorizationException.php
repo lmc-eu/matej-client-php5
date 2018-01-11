@@ -10,6 +10,7 @@ use Psr\Http\Message\ResponseInterface;
  */
 class AuthorizationException extends RequestException
 {
+    /** @return static */
     public static function fromRequestAndResponse(RequestInterface $request, ResponseInterface $response, \Throwable $previous = null)
     {
         $responseData = json_decode($response->getBody()->getContents());

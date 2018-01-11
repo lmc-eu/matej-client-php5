@@ -20,6 +20,7 @@ class ItemProperty extends AbstractCommand
         $this->setProperties($properties);
     }
 
+    /** @return static */
     public static function create($itemId, array $properties = [])
     {
         return new static($itemId, $properties);

@@ -28,6 +28,7 @@ class RecommendationRequestBuilder extends AbstractRequestBuilder
         $this->userRecommendationCommand = $userRecommendationCommand;
     }
 
+    /** @return $this */
     public function setUserMerge(UserMerge $merge)
     {
         $this->userMergeCommand = $merge;
@@ -35,6 +36,7 @@ class RecommendationRequestBuilder extends AbstractRequestBuilder
         return $this;
     }
 
+    /** @return $this */
     public function setInteraction(Interaction $interaction)
     {
         $this->interactionCommand = $interaction;
@@ -44,18 +46,40 @@ class RecommendationRequestBuilder extends AbstractRequestBuilder
 
     public function build()
     {
-        $this->assertConsistentUsersInCommands();
+        $this->assertInteractionUserId();
+        $this->assertUserMergeUserId();
 
-        return new Request(self::ENDPOINT_PATH, RequestMethodInterface::METHOD_POST, [$this->interactionCommand, $this->userMergeCommand, $this->userRecommendationCommand], $this->requestId, RecommendationsResponse::class);
+        return new Request(static::ENDPOINT_PATH, RequestMethodInterface::METHOD_POST, [$this->interactionCommand, $this->userMergeCommand, $this->userRecommendationCommand], $this->requestId, RecommendationsResponse::class);
     }
 
-    private function assertConsistentUsersInCommands()
+    /**
+     * Assert that interaction user ids are ok:
+     * - (A,  null,  A)
+     * - (A, A -> ?, ?)
+     */
+    private function assertInteractionUserId()
     {
-        $mainCommandUser = $this->userRecommendationCommand->getUserId();
-        if ($this->interactionCommand !== null && $mainCommandUser !== $this->interactionCommand->getUserId()) {
+        if ($this->interactionCommand === null) {
+            return;
+        }
+        $interactionUserId = $this->interactionCommand->getUserId();
+        // (A, null, A)
+        if ($this->userMergeCommand === null && $interactionUserId !== $this->userRecommendationCommand->getUserId()) {
             throw LogicException::forInconsistentUserId($this->userRecommendationCommand, $this->interactionCommand);
         }
-        if ($this->userMergeCommand !== null && $mainCommandUser !== $this->userMergeCommand->getUserId()) {
+        // (A, A -> ?, ?)
+        if ($this->userMergeCommand !== null && $interactionUserId !== $this->userMergeCommand->getSourceUserId()) {
+            throw LogicException::forInconsistentUserMergeAndInteractionCommand($this->userMergeCommand->getSourceUserId(), $interactionUserId);
+        }
+    }
+
+    /**
+     * Assert user merge id is ok:
+     * (?, ? -> A, A)
+     */
+    private function assertUserMergeUserId()
+    {
+        if ($this->userMergeCommand !== null && $this->userMergeCommand->getUserId() !== $this->userRecommendationCommand->getUserId()) {
             throw LogicException::forInconsistentUserId($this->userRecommendationCommand, $this->userMergeCommand);
         }
     }

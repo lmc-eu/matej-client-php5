@@ -40,11 +40,13 @@ class Interaction extends AbstractCommand implements UserAwareInterface
     /**
      * Detail view interaction occurs when a user views an information page with detailed description of given item
      * (if there is such a feature available in your system).
+     *
      * @param mixed $userId
      * @param mixed $itemId
      * @param mixed $value
      * @param mixed $context
      * @param null|mixed $timestamp
+     * @return static
      */
     public static function detailView($userId, $itemId, $value = 1.0, $context = 'default', $timestamp = null)
     {
@@ -55,11 +57,13 @@ class Interaction extends AbstractCommand implements UserAwareInterface
      * Purchase interaction generally refer to buying or downloading a specific item by a user, suggesting that the user
      * believes the item to be of high value for her at the time of purchase. For example in the domain of job boards,
      * the purchase interaction stands for a reply of the user on specific Job Description.
+     *
      * @param mixed $userId
      * @param mixed $itemId
      * @param mixed $value
      * @param mixed $context
      * @param null|mixed $timestamp
+     * @return static
      */
     public static function purchase($userId, $itemId, $value = 1.0, $context = 'default', $timestamp = null)
     {
@@ -74,11 +78,13 @@ class Interaction extends AbstractCommand implements UserAwareInterface
      *  - viewing its contents, and would like to view it once more in the future.
      * In both cases, bookmarking indicates positive relationship of the user to the item, allowing Matej to refine
      * recommendations.
+     *
      * @param mixed $userId
      * @param mixed $itemId
      * @param mixed $value
      * @param mixed $context
      * @param null|mixed $timestamp
+     * @return static
      */
     public static function bookmark($userId, $itemId, $value = 1.0, $context = 'default', $timestamp = null)
     {
@@ -89,11 +95,13 @@ class Interaction extends AbstractCommand implements UserAwareInterface
      * Ratings are the most valuable type of interaction user may provide to the Matej recommender – they allow users
      * to submit explicit evaluations of items. These may be expressed as a number of stars (1-5), 👍/👎 voting etc.
      * For the recommendation API, the ratings must be scaled to real-valued interval [0, 1].
+     *
      * @param mixed $userId
      * @param mixed $itemId
      * @param mixed $value
      * @param mixed $context
      * @param null|mixed $timestamp
+     * @return static
      */
     public static function rating($userId, $itemId, $value = 1.0, $context = 'default', $timestamp = null)
     {
