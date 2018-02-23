@@ -57,6 +57,6 @@ class RequestBuilderFactoryTest extends TestCase
         };
         $userRecommendation = UserRecommendation::create('user-id', 1, 'test-scenario', 0.5, 3600);
 
-        return [['getItemProperties', ItemPropertiesGetRequestBuilder::class, $voidInit], ['setupItemProperties', ItemPropertiesSetupRequestBuilder::class, $itemPropertiesSetupInit], ['deleteItemProperties', ItemPropertiesSetupRequestBuilder::class, $itemPropertiesSetupInit], ['events', EventsRequestBuilder::class, $eventInit], ['campaign', CampaignRequestBuilder::class, $campaignInit], ['sorting', SortingRequestBuilder::class, $voidInit, Sorting::create('user-a', ['item-a', 'item-b', 'item-c'])], ['recommendation', RecommendationRequestBuilder::class, $voidInit, $userRecommendation]];
+        return [['getItemProperties', ItemPropertiesGetRequestBuilder::class, $voidInit], ['setupItemProperties', ItemPropertiesSetupRequestBuilder::class, $itemPropertiesSetupInit], ['deleteItemProperties', ItemPropertiesSetupRequestBuilder::class, $itemPropertiesSetupInit], ['events', EventsRequestBuilder::class, $eventInit], ['campaign', CampaignRequestBuilder::class, $campaignInit], ['sorting', SortingRequestBuilder::class, $voidInit, Sorting::create('user-a', ['item-a', 'item-b', 'item-c'])], ['recommendation', RecommendationRequestBuilder::class, $voidInit, $userRecommendation], ['resetDatabase', ResetDatabaseRequestBuilder::class, $voidInit]];
     }
 }

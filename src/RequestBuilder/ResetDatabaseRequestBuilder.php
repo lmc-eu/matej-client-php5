@@ -9,12 +9,12 @@ use Lmc\Matej\Model\Response\PlainResponse;
 /**
  * @method PlainResponse send()
  */
-class ItemPropertiesGetRequestBuilder extends AbstractRequestBuilder
+class ResetDatabaseRequestBuilder extends AbstractRequestBuilder
 {
-    const ENDPOINT_PATH = '/item-properties';
+    const ENDPOINT_PATH = '/database';
 
     public function build()
     {
-        return new Request(self::ENDPOINT_PATH, RequestMethodInterface::METHOD_GET, [], $this->requestId, PlainResponse::class);
+        return new Request(self::ENDPOINT_PATH, RequestMethodInterface::METHOD_DELETE, [], $this->requestId, PlainResponse::class);
     }
 }
