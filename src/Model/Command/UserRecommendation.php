@@ -124,8 +124,12 @@ class UserRecommendation extends AbstractCommand implements UserAwareInterface
         $this->userId = $userId;
     }
 
+    /**
+     * @param int $count
+     */
     protected function setCount($count)
     {
+        Assertion::integer($count);
         Assertion::greaterThan($count, 0);
         $this->count = $count;
     }
@@ -136,14 +140,22 @@ class UserRecommendation extends AbstractCommand implements UserAwareInterface
         $this->scenario = $scenario;
     }
 
+    /**
+     * @param float $rotationRate
+     */
     protected function setRotationRate($rotationRate)
     {
+        Assertion::float($rotationRate);
         Assertion::between($rotationRate, 0, 1);
         $this->rotationRate = $rotationRate;
     }
 
+    /**
+     * @param int $rotationTime
+     */
     protected function setRotationTime($rotationTime)
     {
+        Assertion::integer($rotationTime);
         Assertion::greaterOrEqualThan($rotationTime, 0);
         $this->rotationTime = $rotationTime;
     }
