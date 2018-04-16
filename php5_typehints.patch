@@ -1,0 +1,127 @@
+diff --git b/src/Model/Command/Interaction.php a/src/Model/Command/Interaction.php
+index 7a606b3..1578502 100644
+--- b/src/Model/Command/Interaction.php
++++ a/src/Model/Command/Interaction.php
+@@ -135,8 +135,12 @@ class Interaction extends AbstractCommand implements UserAwareInterface
+         $this->itemId = $itemId;
+     }
+ 
++    /**
++     * @param float $value
++     */
+     protected function setValue($value)
+     {
++        Assertion::float($value);
+         Assertion::between($value, 0, 1);
+         $this->value = $value;
+     }
+@@ -147,8 +151,12 @@ class Interaction extends AbstractCommand implements UserAwareInterface
+         $this->context = $context;
+     }
+ 
++    /**
++     * @param int $timestamp
++     */
+     protected function setTimestamp($timestamp)
+     {
++        Assertion::integer($timestamp);
+         Assertion::greaterThan($timestamp, 0);
+         $this->timestamp = $timestamp;
+     }
+diff --git b/src/Model/Command/UserRecommendation.php a/src/Model/Command/UserRecommendation.php
+index 8b4f50f..59e98a1 100644
+--- b/src/Model/Command/UserRecommendation.php
++++ a/src/Model/Command/UserRecommendation.php
+@@ -124,8 +124,12 @@ class UserRecommendation extends AbstractCommand implements UserAwareInterface
+         $this->userId = $userId;
+     }
+ 
++    /**
++     * @param int $count
++     */
+     protected function setCount($count)
+     {
++        Assertion::integer($count);
+         Assertion::greaterThan($count, 0);
+         $this->count = $count;
+     }
+@@ -136,14 +140,22 @@ class UserRecommendation extends AbstractCommand implements UserAwareInterface
+         $this->scenario = $scenario;
+     }
+ 
++    /**
++     * @param float $rotationRate
++     */
+     protected function setRotationRate($rotationRate)
+     {
++        Assertion::float($rotationRate);
+         Assertion::between($rotationRate, 0, 1);
+         $this->rotationRate = $rotationRate;
+     }
+ 
++    /**
++     * @param int $rotationTime
++     */
+     protected function setRotationTime($rotationTime)
+     {
++        Assertion::integer($rotationTime);
+         Assertion::greaterOrEqualThan($rotationTime, 0);
+         $this->rotationTime = $rotationTime;
+     }
+diff --git b/src/RequestBuilder/RequestBuilderFactory.php a/src/RequestBuilder/RequestBuilderFactory.php
+index 2161c45..b7664c7 100644
+--- b/src/RequestBuilder/RequestBuilderFactory.php
++++ a/src/RequestBuilder/RequestBuilderFactory.php
+@@ -26,6 +26,8 @@ class RequestBuilderFactory
+ 
+     /**
+      * Define new properties into the database. Those properties will be created and subsequently accepted by Matej.
++     *
++     * @return ItemPropertiesSetupRequestBuilder
+      */
+     public function setupItemProperties()
+     {
+@@ -35,27 +37,43 @@ class RequestBuilderFactory
+     /**
+      * Added item properties will be IRREVERSIBLY removed from all items in the database and the item property will
+      * from now be rejected by Matej.
++     *
++     * @return ItemPropertiesSetupRequestBuilder
+      */
+     public function deleteItemProperties()
+     {
+         return $this->createConfiguredBuilder(ItemPropertiesSetupRequestBuilder::class, $shouldDelete = true);
+     }
+ 
++    /**
++     * @return EventsRequestBuilder
++     */
+     public function events()
+     {
+         return $this->createConfiguredBuilder(EventsRequestBuilder::class);
+     }
+ 
++    /**
++     * @return CampaignRequestBuilder
++     */
+     public function campaign()
+     {
+         return $this->createConfiguredBuilder(CampaignRequestBuilder::class);
+     }
+ 
++    /**
++     * @param Sorting $sorting
++     * @return SortingRequestBuilder
++     */
+     public function sorting(Sorting $sorting)
+     {
+         return $this->createConfiguredBuilder(SortingRequestBuilder::class, $sorting);
+     }
+ 
++    /**
++     * @param UserRecommendation $recommendation
++     * @return RecommendationRequestBuilder
++     */
+     public function recommendation(UserRecommendation $recommendation)
+     {
+         return $this->createConfiguredBuilder(RecommendationRequestBuilder::class, $recommendation);

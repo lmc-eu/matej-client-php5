@@ -36,6 +36,9 @@ rm -rf tmp-7
 # Fix codestyle of the PHP 5 source
 vendor/bin/php-cs-fixer fix tmp-5/
 
+# Apply PHP 5-only patches
+patch -d tmp-5 -p1 < php5_typehints.patch
+
 # Move contents of tmp-5/ to root directory
 (cd tmp-5 && tar c .) | (tar xf -)
 rm -rf tmp-5
