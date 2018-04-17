@@ -2,6 +2,7 @@
 
 namespace Lmc\Matej\IntegrationTests\RequestBuilder;
 
+use Lmc\Matej\Exception\RequestException;
 use Lmc\Matej\IntegrationTests\IntegrationTestCase;
 use Lmc\Matej\Model\Command\Interaction;
 use Lmc\Matej\Model\Command\UserMerge;
@@ -18,7 +19,7 @@ class RecommendationRequestBuilderTest extends IntegrationTestCase
     /** @test */
     public function shouldExecuteRecommendationRequestOnly()
     {
-        $response = $this->createMatejInstance()->request()->recommendation($this->createRecommendationCommand('user-a'))->send();
+        $response = static::createMatejInstance()->request()->recommendation($this->createRecommendationCommand('user-a'))->send();
         $this->assertInstanceOf(RecommendationsResponse::class, $response);
         $this->assertResponseCommandStatuses($response, 'SKIPPED', 'SKIPPED', 'OK');
         $this->assertShorthandResponse($response, 'SKIPPED', 'SKIPPED', 'OK');
@@ -27,10 +28,19 @@ class RecommendationRequestBuilderTest extends IntegrationTestCase
     /** @test */
     public function shouldExecuteRecommendationRequestWithUserMergeAndInteraction()
     {
-        $response = $this->createMatejInstance()->request()->recommendation($this->createRecommendationCommand('user-b'))->setUserMerge(UserMerge::mergeInto('user-b', 'user-a'))->setInteraction(Interaction::bookmark('user-a', 'item-a'))->send();
+        $response = static::createMatejInstance()->request()->recommendation($this->createRecommendationCommand('user-b'))->setUserMerge(UserMerge::mergeInto('user-b', 'user-a'))->setInteraction(Interaction::bookmark('user-a', 'item-a'))->send();
         $this->assertInstanceOf(RecommendationsResponse::class, $response);
         $this->assertResponseCommandStatuses($response, 'OK', 'OK', 'OK');
         $this->assertShorthandResponse($response, 'OK', 'OK', 'OK');
+    }
+
+    /** @test */
+    public function shouldFailOnInvalidModelName()
+    {
+        $this->expectException(RequestException::class);
+        $this->expectExceptionCode(400);
+        $this->expectExceptionMessage('BAD REQUEST');
+        $this->createMatejInstance()->request()->recommendation($this->createRecommendationCommand('user-a')->setModelName('invalid-model-name'))->send();
     }
 
     private function createRecommendationCommand($username)

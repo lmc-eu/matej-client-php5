@@ -27,6 +27,7 @@ class UserMergeTest extends UnitTestCase
 
     /**
      * Execute asserts against user merge command
+     *
      * @param UserMerge $command
      * @param mixed $sourceUserId
      * @param mixed $targetUserId

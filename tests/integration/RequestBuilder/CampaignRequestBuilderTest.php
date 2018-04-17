@@ -17,13 +17,13 @@ class CampaignRequestBuilderTest extends IntegrationTestCase
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('At least one command must be added to the builder before sending the request');
-        $this->createMatejInstance()->request()->campaign()->send();
+        static::createMatejInstance()->request()->campaign()->send();
     }
 
     /** @test */
     public function shouldExecuteRecommendationAndSortingCommands()
     {
-        $response = $this->createMatejInstance()->request()->campaign()->addRecommendation($this->createRecommendationCommand('a'))->addRecommendations([$this->createRecommendationCommand('b'), $this->createRecommendationCommand('c')])->addSorting($this->createSortingCommand('a'))->addSortings([$this->createSortingCommand('b'), $this->createSortingCommand('c')])->send();
+        $response = static::createMatejInstance()->request()->campaign()->addRecommendation($this->createRecommendationCommand('a'))->addRecommendations([$this->createRecommendationCommand('b'), $this->createRecommendationCommand('c')])->addSorting($this->createSortingCommand('a'))->addSortings([$this->createSortingCommand('b'), $this->createSortingCommand('c')])->send();
         $this->assertResponseCommandStatuses($response, ...$this->generateOkStatuses(6));
     }
 

@@ -14,7 +14,7 @@ class ItemPropertiesGetRequestBuilderTest extends IntegrationTestCase
     /** @test */
     public function shouldGetListOfPropertiesFromMatej()
     {
-        $response = $this->createMatejInstance()->request()->getItemProperties()->send();
+        $response = static::createMatejInstance()->request()->getItemProperties()->send();
         $this->assertResponseCommandStatuses($response, 'OK');
         $this->assertInstanceOf(PlainResponse::class, $response);
         $this->assertTrue($response->isSuccessful());
