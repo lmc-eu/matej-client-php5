@@ -135,8 +135,12 @@ class Interaction extends AbstractCommand implements UserAwareInterface
         $this->itemId = $itemId;
     }
 
+    /**
+     * @param float $value
+     */
     protected function setValue($value)
     {
+        Assertion::float($value);
         Assertion::between($value, 0, 1);
         $this->value = $value;
     }
@@ -147,8 +151,12 @@ class Interaction extends AbstractCommand implements UserAwareInterface
         $this->context = $context;
     }
 
+    /**
+     * @param int $timestamp
+     */
     protected function setTimestamp($timestamp)
     {
+        Assertion::integer($timestamp);
         Assertion::greaterThan($timestamp, 0);
         $this->timestamp = $timestamp;
     }
