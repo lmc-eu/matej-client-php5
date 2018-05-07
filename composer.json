@@ -23,29 +23,29 @@
     },
     "require": {
         "php": "^5.6",
-        "ext-json": "*",
         "ext-hash": "*",
-        "php-http/httplug": "^1.1",
-        "php-http/message-factory": "^1.0.2",
-        "php-http/client-implementation": "^1.0",
-        "php-http/discovery": "^1.0",
+        "ext-json": "*",
+        "beberlei/assert": "^2.8",
         "fig/http-message-util": "^1.1",
         "php-http/client-common": "^1.6",
-        "beberlei/assert": "^2.8",
+        "php-http/client-implementation": "^1.0",
+        "php-http/discovery": "^1.0",
+        "php-http/httplug": "^1.1",
+        "php-http/message-factory": "^1.0.2",
         "ramsey/uuid": "^3.7"
     },
     "require-dev": {
-        "php-http/guzzle6-adapter": "^1.1",
-        "php-http/mock-client": "^1.0",
-        "php-http/message": "^1.0",
-        "phpunit/phpunit": "^5.7 || ^6.4 <6.5",
         "friendsofphp/php-cs-fixer": "^2.7",
-        "php-coveralls/php-coveralls": "^2.0",
-        "symfony/var-dumper": "^3.3",
-        "php-mock/php-mock-phpunit": "^1.0 || ^2.0",
-        "spatie/7to5": "^1.2",
+        "jakub-onderka/php-console-highlighter": "^0.3.2",
         "jakub-onderka/php-parallel-lint": "^0.9.2",
-        "jakub-onderka/php-console-highlighter": "^0.3.2"
+        "php-coveralls/php-coveralls": "^2.0",
+        "php-http/guzzle6-adapter": "^1.1",
+        "php-http/message": "^1.0",
+        "php-http/mock-client": "^1.0",
+        "php-mock/php-mock-phpunit": "^1.0 || ^2.0",
+        "phpunit/phpunit": "^5.7 || ^6.4 <6.5",
+        "spatie/7to5": "^1.2",
+        "symfony/var-dumper": "^3.3"
     },
     "scripts": {
         "all": [
@@ -58,6 +58,7 @@
         ]
     },
     "config": {
+        "sort-packages": true,
         "platform": {
             "php": "5.6.30"
         }
