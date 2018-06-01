@@ -79,11 +79,17 @@ class RequestBuilderFactory
         return $this->createConfiguredBuilder(RecommendationRequestBuilder::class, $recommendation);
     }
 
+    /**
+     * @return ForgetRequestBuilder
+     */
     public function forget()
     {
         return $this->createConfiguredBuilder(ForgetRequestBuilder::class);
     }
 
+    /**
+     * @return ResetDatabaseRequestBuilder
+     */
     public function resetDatabase()
     {
         return $this->createConfiguredBuilder(ResetDatabaseRequestBuilder::class);

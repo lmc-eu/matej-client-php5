@@ -69,7 +69,7 @@ index 8b4f50f..59e98a1 100644
          $this->rotationTime = $rotationTime;
      }
 diff --git b/src/RequestBuilder/RequestBuilderFactory.php a/src/RequestBuilder/RequestBuilderFactory.php
-index 2161c45..b7664c7 100644
+index a356a45..098c048 100644
 --- b/src/RequestBuilder/RequestBuilderFactory.php
 +++ a/src/RequestBuilder/RequestBuilderFactory.php
 @@ -26,6 +26,8 @@ class RequestBuilderFactory
@@ -81,7 +81,7 @@ index 2161c45..b7664c7 100644
       */
      public function setupItemProperties()
      {
-@@ -35,27 +37,43 @@ class RequestBuilderFactory
+@@ -35,37 +37,59 @@ class RequestBuilderFactory
      /**
       * Added item properties will be IRREVERSIBLY removed from all items in the database and the item property will
       * from now be rejected by Matej.
@@ -125,3 +125,19 @@ index 2161c45..b7664c7 100644
      public function recommendation(UserRecommendation $recommendation)
      {
          return $this->createConfiguredBuilder(RecommendationRequestBuilder::class, $recommendation);
+     }
+ 
++    /**
++     * @return ForgetRequestBuilder
++     */
+     public function forget()
+     {
+         return $this->createConfiguredBuilder(ForgetRequestBuilder::class);
+     }
+ 
++    /**
++     * @return ResetDatabaseRequestBuilder
++     */
+     public function resetDatabase()
+     {
+         return $this->createConfiguredBuilder(ResetDatabaseRequestBuilder::class);
