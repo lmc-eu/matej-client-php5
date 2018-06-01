@@ -6,6 +6,7 @@ use Lmc\Matej\Http\RequestManager;
 use Lmc\Matej\Model\Command\ItemProperty;
 use Lmc\Matej\Model\Command\ItemPropertySetup;
 use Lmc\Matej\Model\Command\Sorting;
+use Lmc\Matej\Model\Command\UserForget;
 use Lmc\Matej\Model\Command\UserRecommendation;
 use Lmc\Matej\Model\Request;
 use Lmc\Matej\Model\Response;
@@ -53,10 +54,13 @@ class RequestBuilderFactoryTest extends TestCase
         $campaignInit = function (CampaignRequestBuilder $builder) {
             $builder->addSorting(Sorting::create('item-id', ['item1', 'item2']));
         };
+        $forgetInit = function (ForgetRequestBuilder $builder) {
+            $builder->addUser(UserForget::anonymize('test-user-for-anonymization'));
+        };
         $voidInit = function ($builder) {
         };
         $userRecommendation = UserRecommendation::create('user-id', 1, 'test-scenario', 0.5, 3600);
 
-        return [['getItemProperties', ItemPropertiesGetRequestBuilder::class, $voidInit], ['setupItemProperties', ItemPropertiesSetupRequestBuilder::class, $itemPropertiesSetupInit], ['deleteItemProperties', ItemPropertiesSetupRequestBuilder::class, $itemPropertiesSetupInit], ['events', EventsRequestBuilder::class, $eventInit], ['campaign', CampaignRequestBuilder::class, $campaignInit], ['sorting', SortingRequestBuilder::class, $voidInit, Sorting::create('user-a', ['item-a', 'item-b', 'item-c'])], ['recommendation', RecommendationRequestBuilder::class, $voidInit, $userRecommendation], ['resetDatabase', ResetDatabaseRequestBuilder::class, $voidInit]];
+        return [['getItemProperties', ItemPropertiesGetRequestBuilder::class, $voidInit], ['setupItemProperties', ItemPropertiesSetupRequestBuilder::class, $itemPropertiesSetupInit], ['deleteItemProperties', ItemPropertiesSetupRequestBuilder::class, $itemPropertiesSetupInit], ['events', EventsRequestBuilder::class, $eventInit], ['campaign', CampaignRequestBuilder::class, $campaignInit], ['sorting', SortingRequestBuilder::class, $voidInit, Sorting::create('user-a', ['item-a', 'item-b', 'item-c'])], ['recommendation', RecommendationRequestBuilder::class, $voidInit, $userRecommendation], ['forget', ForgetRequestBuilder::class, $forgetInit], ['resetDatabase', ResetDatabaseRequestBuilder::class, $voidInit]];
     }
 }
