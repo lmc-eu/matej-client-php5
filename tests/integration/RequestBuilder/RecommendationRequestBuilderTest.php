@@ -40,7 +40,18 @@ class RecommendationRequestBuilderTest extends IntegrationTestCase
         $this->expectException(RequestException::class);
         $this->expectExceptionCode(400);
         $this->expectExceptionMessage('BAD REQUEST');
-        $this->createMatejInstance()->request()->recommendation($this->createRecommendationCommand('user-a')->setModelName('invalid-model-name'))->send();
+        $recommendation = $this->createRecommendationCommand('user-a')->setModelName('invalid-model-name');
+        static::createMatejInstance()->request()->recommendation($recommendation)->send();
+    }
+
+    /** @test */
+    public function shouldFailOnInvalidPropertyName()
+    {
+        $this->expectException(RequestException::class);
+        $this->expectExceptionCode(400);
+        $this->expectExceptionMessage('BAD REQUEST');
+        $recommendation = $this->createRecommendationCommand('user-a')->addResponseProperty('unknown-property');
+        static::createMatejInstance()->request()->recommendation($recommendation)->send();
     }
 
     private function createRecommendationCommand($username)

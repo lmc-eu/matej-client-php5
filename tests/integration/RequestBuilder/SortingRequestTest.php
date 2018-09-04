@@ -40,7 +40,7 @@ class SortingRequestTest extends IntegrationTestCase
         $this->expectException(RequestException::class);
         $this->expectExceptionCode(400);
         $this->expectExceptionMessage('BAD REQUEST');
-        $this->createMatejInstance()->request()->sorting(Sorting::create('user-b', ['item-a', 'item-b', 'itemC-c'])->setModelName('invalid-model-name'))->send();
+        static::createMatejInstance()->request()->sorting(Sorting::create('user-b', ['item-a', 'item-b', 'itemC-c'])->setModelName('invalid-model-name'))->send();
     }
 
     private function assertShorthandResponse(SortingResponse $response, $interactionStatus, $userMergeStatus, $sortingStatus)

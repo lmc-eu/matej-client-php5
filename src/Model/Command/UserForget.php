@@ -3,6 +3,7 @@
 namespace Lmc\Matej\Model\Command;
 
 use Lmc\Matej\Model\Assertion;
+use Lmc\Matej\Model\Command\Constants\UserForgetMethod;
 
 /**
  * UserForget any user in Matej, either by anonymizing or by deleting their entries.
@@ -11,17 +12,15 @@ use Lmc\Matej\Model\Assertion;
  */
 class UserForget extends AbstractCommand implements UserAwareInterface
 {
-    const ANONYMIZE = 'anonymize';
-    const DELETE = 'delete';
     /** @var string */
     private $userId;
-    /** @var string */
+    /** @var UserForgetMethod */
     private $method;
 
-    private function __construct($userId, $method)
+    private function __construct($userId, UserForgetMethod $method)
     {
         $this->setUserId($userId);
-        $this->setForgetMethod($method);
+        $this->method = $method;
     }
 
     /**
@@ -30,7 +29,7 @@ class UserForget extends AbstractCommand implements UserAwareInterface
      */
     public static function anonymize($userId)
     {
-        return new static($userId, self::ANONYMIZE);
+        return new static($userId, UserForgetMethod::ANONYMIZE());
     }
 
     /**
@@ -39,7 +38,7 @@ class UserForget extends AbstractCommand implements UserAwareInterface
      */
     public static function delete($userId)
     {
-        return new static($userId, self::DELETE);
+        return new static($userId, UserForgetMethod::DELETE());
     }
 
     public function getUserId()
@@ -58,12 +57,6 @@ class UserForget extends AbstractCommand implements UserAwareInterface
         $this->userId = $userId;
     }
 
-    protected function setForgetMethod($method)
-    {
-        Assertion::choice($method, [self::ANONYMIZE, self::DELETE]);
-        $this->method = $method;
-    }
-
     protected function getCommandType()
     {
         return 'user-forget';
@@ -71,6 +64,6 @@ class UserForget extends AbstractCommand implements UserAwareInterface
 
     protected function getCommandParameters()
     {
-        return ['user_id' => $this->userId, 'method' => $this->method];
+        return ['user_id' => $this->userId, 'method' => $this->method->jsonSerialize()];
     }
 }

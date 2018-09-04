@@ -2,6 +2,7 @@
 
 namespace Lmc\Matej\Model\Command;
 
+use Lmc\Matej\Model\Command\Constants\UserForgetMethod;
 use Lmc\Matej\UnitTestCase;
 
 class UserForgetTest extends UnitTestCase
@@ -11,9 +12,9 @@ class UserForgetTest extends UnitTestCase
     {
         $userId = 'user-id';
         $command = UserForget::anonymize($userId);
-        $this->assertForgetCommand($command, $userId, UserForget::ANONYMIZE);
+        $this->assertForgetCommand($command, $userId, UserForgetMethod::ANONYMIZE());
         $command = UserForget::delete($userId);
-        $this->assertForgetCommand($command, $userId, UserForget::DELETE);
+        $this->assertForgetCommand($command, $userId, UserForgetMethod::DELETE());
     }
 
     /**
@@ -21,13 +22,13 @@ class UserForgetTest extends UnitTestCase
      *
      * @param UserForget $command
      * @param mixed $userId
-     * @param mixed $method
+     * @param UserForgetMethod $method
      */
-    private function assertForgetCommand($command, $userId, $method)
+    private function assertForgetCommand($command, $userId, UserForgetMethod $method)
     {
         $this->assertInstanceOf(UserForget::class, $command);
-        $this->assertSame(['type' => 'user-forget', 'parameters' => ['user_id' => $userId, 'method' => $method]], $command->jsonSerialize());
+        $this->assertSame(['type' => 'user-forget', 'parameters' => ['user_id' => $userId, 'method' => $method->jsonSerialize()]], $command->jsonSerialize());
         $this->assertSame($userId, $command->getUserId());
-        $this->assertSame($method, $command->getForgetMethod());
+        $this->assertEquals($method, $command->getForgetMethod());
     }
 }
