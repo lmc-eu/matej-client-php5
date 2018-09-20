@@ -26,9 +26,9 @@ class UserRecommendationTest extends TestCase
         $rotationTime = random_int(1, 86400);
         $modelName = 'test-model-' . md5(microtime());
         $command = UserRecommendation::create($userId, $count, $scenario, $rotationRate, $rotationTime);
-        $command->setMinimalRelevance(MinimalRelevance::HIGH())->enableHardRotation()->setFilters(['foo = bar', 'baz = ban'])->setModelName($modelName);
+        $command->setMinimalRelevance(MinimalRelevance::HIGH())->enableHardRotation()->setFilters(['foo = bar', 'baz = ban'])->setModelName($modelName)->setAllowSeen(true);
         $this->assertInstanceOf(UserRecommendation::class, $command);
-        $this->assertSame(['type' => 'user-based-recommendations', 'parameters' => ['user_id' => $userId, 'count' => $count, 'scenario' => $scenario, 'rotation_rate' => $rotationRate, 'rotation_time' => $rotationTime, 'hard_rotation' => true, 'min_relevance' => MinimalRelevance::HIGH, 'filter' => 'foo = bar and baz = ban', 'filter_type' => UserRecommendation::FILTER_TYPE_MQL, 'properties' => [], 'model_name' => $modelName]], $command->jsonSerialize());
+        $this->assertSame(['type' => 'user-based-recommendations', 'parameters' => ['user_id' => $userId, 'count' => $count, 'scenario' => $scenario, 'rotation_rate' => $rotationRate, 'rotation_time' => $rotationTime, 'hard_rotation' => true, 'min_relevance' => MinimalRelevance::HIGH, 'filter' => 'foo = bar and baz = ban', 'filter_type' => UserRecommendation::FILTER_TYPE_MQL, 'properties' => [], 'model_name' => $modelName, 'allow_seen' => true]], $command->jsonSerialize());
     }
 
     /** @test */
