@@ -40,6 +40,6 @@ class ItemPropertySetupTest extends TestCase
      */
     public function provideConstructorName()
     {
-        return [['int', PropertyType::INT], ['double', PropertyType::DOUBLE], ['string', PropertyType::STRING], ['boolean', PropertyType::BOOLEAN], ['timestamp', PropertyType::TIMESTAMP], ['set', PropertyType::SET]];
+        return [['int', PropertyType::INT], ['double', PropertyType::DOUBLE], ['string', PropertyType::STRING], ['boolean', PropertyType::BOOLEAN], ['timestamp', PropertyType::TIMESTAMP], ['set', PropertyType::SET], ['geolocation', PropertyType::GEOLOCATION]];
     }
 }

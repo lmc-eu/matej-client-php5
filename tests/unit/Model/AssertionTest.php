@@ -35,7 +35,7 @@ class AssertionTest extends TestCase
      * @test
      * @dataProvider provideInvalidTypeIdentifiers
      * @param mixed $typeIdentifier
-     * @param string $expectedExceptionMessage
+     * @param mixed $expectedExceptionMessage
      */
     public function shouldAssertInvalidTypeIdentifier($typeIdentifier, $expectedExceptionMessage)
     {

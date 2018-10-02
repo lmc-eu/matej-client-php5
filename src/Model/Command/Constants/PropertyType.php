@@ -11,6 +11,7 @@ use MyCLabs\Enum\Enum;
  * @method static PropertyType BOOLEAN()
  * @method static PropertyType TIMESTAMP()
  * @method static PropertyType SET()
+ * @method static PropertyType GEOLOCATION()
  */
 final class PropertyType extends Enum
 {
@@ -20,4 +21,5 @@ final class PropertyType extends Enum
     const BOOLEAN = 'boolean';
     const TIMESTAMP = 'timestamp';
     const SET = 'set';
+    const GEOLOCATION = 'geolocation';
 }

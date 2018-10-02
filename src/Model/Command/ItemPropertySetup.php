@@ -57,6 +57,12 @@ class ItemPropertySetup extends AbstractCommand
         return new static($propertyName, PropertyType::SET());
     }
 
+    /** @return static */
+    public static function geolocation($propertyName)
+    {
+        return new static($propertyName, PropertyType::GEOLOCATION());
+    }
+
     protected function setPropertyName($propertyName)
     {
         Assertion::typeIdentifier($propertyName);
