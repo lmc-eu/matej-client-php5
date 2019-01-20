@@ -29,7 +29,7 @@ class CommandResponseTest extends UnitTestCase
      */
     public function provideObjectResponses()
     {
-        return ['OK response with only status' => [(object) ['status' => CommandResponse::STATUS_OK], CommandResponse::STATUS_OK, '', []], 'OK response with status and empty message and data' => [(object) ['status' => CommandResponse::STATUS_OK, 'message' => '', 'data' => []], CommandResponse::STATUS_OK, '', []], 'OK response with all fields' => [(object) ['status' => CommandResponse::STATUS_OK, 'message' => 'Nice!', 'data' => [['foo' => 'bar'], ['baz' => 'bak']]], CommandResponse::STATUS_OK, 'Nice!', [['foo' => 'bar'], ['baz' => 'bak']]], 'Invalid error response with status and message' => [(object) ['status' => CommandResponse::STATUS_ERROR, 'message' => 'Internal unhandled error'], CommandResponse::STATUS_ERROR, 'Internal unhandled error', []]];
+        return ['OK response with only status' => [(object) ['status' => CommandResponse::STATUS_OK], CommandResponse::STATUS_OK, '', []], 'OK response with status and empty message and data' => [(object) ['status' => CommandResponse::STATUS_OK, 'message' => '', 'data' => []], CommandResponse::STATUS_OK, '', []], 'OK response with all fields' => [(object) ['status' => CommandResponse::STATUS_OK, 'message' => 'Nice!', 'data' => [['foo' => 'bar'], ['baz' => 'bak']]], CommandResponse::STATUS_OK, 'Nice!', [['foo' => 'bar'], ['baz' => 'bak']]], 'Invalid error response with status and message' => [(object) ['status' => CommandResponse::STATUS_INVALID, 'message' => 'Internal unhandled error'], CommandResponse::STATUS_INVALID, 'Internal unhandled error', []]];
     }
 
     /**
@@ -49,7 +49,7 @@ class CommandResponseTest extends UnitTestCase
      */
     public function provideResponseStatuses()
     {
-        return [['status' => CommandResponse::STATUS_OK, 'isSuccessful' => true], ['status' => CommandResponse::STATUS_ERROR, 'isSuccessful' => false], ['status' => CommandResponse::STATUS_INVALID, 'isSuccessful' => false], ['status' => CommandResponse::STATUS_SKIPPED, 'isSuccessful' => false]];
+        return [['status' => CommandResponse::STATUS_OK, 'isSuccessful' => true], ['status' => CommandResponse::STATUS_INVALID, 'isSuccessful' => false], ['status' => CommandResponse::STATUS_SKIPPED, 'isSuccessful' => true]];
     }
 
     /** @test */

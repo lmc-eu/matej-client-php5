@@ -19,8 +19,9 @@ class ResponseTest extends UnitTestCase
      * @param mixed $numberOfFailed
      * @param mixed $numberOfSkipped
      * @param array $commandResponses
+     * @param mixed $shouldBeSuccessful
      */
-    public function shouldBeInstantiable($numberOfCommands, $numberOfSuccessful, $numberOfFailed, $numberOfSkipped, array $commandResponses)
+    public function shouldBeInstantiable($numberOfCommands, $numberOfSuccessful, $numberOfFailed, $numberOfSkipped, array $commandResponses, $shouldBeSuccessful)
     {
         $responseId = uniqid((string) time());
         $response = new Response($numberOfCommands, $numberOfSuccessful, $numberOfFailed, $numberOfSkipped, $commandResponses, $responseId);
@@ -29,6 +30,7 @@ class ResponseTest extends UnitTestCase
         $this->assertSame($numberOfFailed, $response->getNumberOfFailedCommands());
         $this->assertSame($numberOfSkipped, $response->getNumberOfSkippedCommands());
         $this->assertSame($responseId, $response->getResponseId());
+        $this->assertSame($shouldBeSuccessful, $response->isSuccessful());
         $this->assertCount(count($commandResponses), $response->getCommandResponses());
         $this->assertContainsOnlyInstancesOf(CommandResponse::class, $response->getCommandResponses());
         for ($i = 0; $i < count($commandResponses); $i++) {
@@ -42,10 +44,10 @@ class ResponseTest extends UnitTestCase
     public function provideResponseData()
     {
         $okCommandResponse = (object) ['status' => CommandResponse::STATUS_OK, 'message' => '', 'data' => []];
-        $failedCommandResponse = (object) ['status' => CommandResponse::STATUS_ERROR, 'message' => 'KO', 'data' => []];
+        $failedCommandResponse = (object) ['status' => CommandResponse::STATUS_INVALID, 'message' => 'KO', 'data' => []];
         $skippedCommandResponse = (object) ['status' => CommandResponse::STATUS_SKIPPED, 'message' => '', 'data' => []];
 
-        return ['empty response data' => [0, 0, 0, 0, []], 'multiple successful commands' => [2, 2, 0, 0, [$okCommandResponse, $okCommandResponse]], 'multiple failed commands' => [2, 0, 2, 0, [$failedCommandResponse, $failedCommandResponse]], 'multiple skipped commands' => [2, 0, 0, 2, [$skippedCommandResponse, $skippedCommandResponse]], 'multiple successful , failed and skipped commands' => [5, 2, 2, 1, [$failedCommandResponse, $okCommandResponse, $okCommandResponse, $skippedCommandResponse, $failedCommandResponse]]];
+        return ['empty response data' => [0, 0, 0, 0, [], true], 'multiple ok commands' => [2, 2, 0, 0, [$okCommandResponse, $okCommandResponse], true], 'multiple failed commands' => [2, 0, 2, 0, [$failedCommandResponse, $failedCommandResponse], false], 'multiple skipped commands' => [2, 0, 0, 2, [$skippedCommandResponse, $skippedCommandResponse], true], 'ok and skipped command' => [2, 1, 0, 1, [$okCommandResponse, $skippedCommandResponse], true], 'ok and failed commands' => [2, 1, 1, 0, [$okCommandResponse, $failedCommandResponse], false], 'skipped and failed command' => [2, 0, 1, 1, [$skippedCommandResponse, $skippedCommandResponse], false], 'multiple successful , failed and skipped commands' => [5, 2, 2, 1, [$failedCommandResponse, $okCommandResponse, $okCommandResponse, $skippedCommandResponse, $failedCommandResponse], false]];
     }
 
     /**

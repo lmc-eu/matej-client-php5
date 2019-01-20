@@ -34,7 +34,7 @@ class IntegrationTestCase extends TestCase
     {
         $this->assertSame(count($expectedCommandStatuses), $response->getNumberOfCommands());
         $this->assertSame(count(array_intersect($expectedCommandStatuses, ['OK'])), $response->getNumberOfSuccessfulCommands());
-        $this->assertSame(count(array_intersect($expectedCommandStatuses, ['ERROR'])), $response->getNumberOfFailedCommands());
+        $this->assertSame(count(array_intersect($expectedCommandStatuses, ['INVALID'])), $response->getNumberOfFailedCommands());
         $this->assertSame(count(array_intersect($expectedCommandStatuses, ['SKIPPED'])), $response->getNumberOfSkippedCommands());
         $commandResponses = $response->getCommandResponses();
         foreach ($expectedCommandStatuses as $key => $expectedStatus) {

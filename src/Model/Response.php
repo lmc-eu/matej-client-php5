@@ -83,4 +83,9 @@ class Response
     {
         return $this->responseId;
     }
+
+    public function isSuccessful()
+    {
+        return $this->getNumberOfFailedCommands() === 0;
+    }
 }

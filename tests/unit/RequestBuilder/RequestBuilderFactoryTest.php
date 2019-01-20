@@ -23,7 +23,7 @@ class RequestBuilderFactoryTest extends TestCase
      * @param mixed $factoryMethod
      * @param mixed $expectedBuilderClass
      * @param \Closure $minimalBuilderInit
-     * @param ... $factoryArguments
+     * @param array $factoryArguments
      */
     public function shouldInstantiateBuilderToBuildAndSendRequest($factoryMethod, $expectedBuilderClass, \Closure $minimalBuilderInit, ...$factoryArguments)
     {

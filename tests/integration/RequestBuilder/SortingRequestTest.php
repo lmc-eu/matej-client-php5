@@ -2,7 +2,6 @@
 
 namespace Lmc\Matej\IntegrationTests\RequestBuilder;
 
-use Lmc\Matej\Exception\RequestException;
 use Lmc\Matej\IntegrationTests\IntegrationTestCase;
 use Lmc\Matej\Model\Command\Interaction;
 use Lmc\Matej\Model\Command\Sorting;
@@ -35,12 +34,12 @@ class SortingRequestTest extends IntegrationTestCase
     }
 
     /** @test */
-    public function shouldFailOnInvalidModelName()
+    public function shouldReturnInvalidCommandOnInvalidModelName()
     {
-        $this->expectException(RequestException::class);
-        $this->expectExceptionCode(400);
-        $this->expectExceptionMessage('BAD REQUEST');
-        static::createMatejInstance()->request()->sorting(Sorting::create('user-b', ['item-a', 'item-b', 'itemC-c'])->setModelName('invalid-model-name'))->send();
+        $response = static::createMatejInstance()->request()->sorting(Sorting::create('user-b', ['item-a', 'item-b', 'itemC-c'])->setModelName('invalid-model-name'))->send();
+        $this->assertInstanceOf(SortingResponse::class, $response);
+        $this->assertResponseCommandStatuses($response, 'SKIPPED', 'SKIPPED', 'INVALID');
+        $this->assertShorthandResponse($response, 'SKIPPED', 'SKIPPED', 'INVALID');
     }
 
     private function assertShorthandResponse(SortingResponse $response, $interactionStatus, $userMergeStatus, $sortingStatus)
