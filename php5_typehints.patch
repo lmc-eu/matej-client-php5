@@ -5,7 +5,7 @@ index 7a606b3..1578502 100644
 @@ -135,8 +135,12 @@ class Interaction extends AbstractCommand implements UserAwareInterface
          $this->itemId = $itemId;
      }
- 
+
 +    /**
 +     * @param float $value
 +     */
@@ -18,7 +18,7 @@ index 7a606b3..1578502 100644
 @@ -147,8 +151,12 @@ class Interaction extends AbstractCommand implements UserAwareInterface
          $this->context = $context;
      }
- 
+
 +    /**
 +     * @param int $timestamp
 +     */
@@ -35,7 +35,7 @@ index 8b4f50f..59e98a1 100644
 @@ -124,8 +124,12 @@ class UserRecommendation extends AbstractCommand implements UserAwareInterface
          $this->userId = $userId;
      }
- 
+
 +    /**
 +     * @param int $count
 +     */
@@ -48,7 +48,7 @@ index 8b4f50f..59e98a1 100644
 @@ -136,14 +140,22 @@ class UserRecommendation extends AbstractCommand implements UserAwareInterface
          $this->scenario = $scenario;
      }
- 
+
 +    /**
 +     * @param float $rotationRate
 +     */
@@ -58,7 +58,7 @@ index 8b4f50f..59e98a1 100644
          Assertion::between($rotationRate, 0, 1);
          $this->rotationRate = $rotationRate;
      }
- 
+
 +    /**
 +     * @param int $rotationTime
 +     */
@@ -69,11 +69,11 @@ index 8b4f50f..59e98a1 100644
          $this->rotationTime = $rotationTime;
      }
 diff --git b/src/RequestBuilder/RequestBuilderFactory.php a/src/RequestBuilder/RequestBuilderFactory.php
-index a356a45..098c048 100644
---- b/src/RequestBuilder/RequestBuilderFactory.php
-+++ a/src/RequestBuilder/RequestBuilderFactory.php
-@@ -26,6 +26,8 @@ class RequestBuilderFactory
- 
+index f410a97..2f6ccf2 100644
+--- a/src/RequestBuilder/RequestBuilderFactory.php
++++ b/src/RequestBuilder/RequestBuilderFactory.php
+@@ -29,6 +29,8 @@ class RequestBuilderFactory
+
      /**
       * Define new properties into the database. Those properties will be created and subsequently accepted by Matej.
 +     *
@@ -81,7 +81,7 @@ index a356a45..098c048 100644
       */
      public function setupItemProperties()
      {
-@@ -35,37 +37,59 @@ class RequestBuilderFactory
+@@ -41,6 +43,8 @@ class RequestBuilderFactory
      /**
       * Added item properties will be IRREVERSIBLY removed from all items in the database and the item property will
       * from now be rejected by Matej.
@@ -90,54 +90,65 @@ index a356a45..098c048 100644
       */
      public function deleteItemProperties()
      {
-         return $this->createConfiguredBuilder(ItemPropertiesSetupRequestBuilder::class, $shouldDelete = true);
+@@ -50,6 +54,9 @@ class RequestBuilderFactory
+         return $requestBuilder;
      }
- 
+
 +    /**
 +     * @return EventsRequestBuilder
 +     */
      public function events()
      {
-         return $this->createConfiguredBuilder(EventsRequestBuilder::class);
+         $requestBuilder = new EventsRequestBuilder();
+@@ -58,6 +65,9 @@ class RequestBuilderFactory
+         return $requestBuilder;
      }
- 
+
 +    /**
 +     * @return CampaignRequestBuilder
 +     */
      public function campaign()
      {
-         return $this->createConfiguredBuilder(CampaignRequestBuilder::class);
+         $requestBuilder = new CampaignRequestBuilder();
+@@ -66,6 +76,10 @@ class RequestBuilderFactory
+         return $requestBuilder;
      }
- 
+
 +    /**
 +     * @param Sorting $sorting
 +     * @return SortingRequestBuilder
 +     */
      public function sorting(Sorting $sorting)
      {
-         return $this->createConfiguredBuilder(SortingRequestBuilder::class, $sorting);
+         $requestBuilder = new SortingRequestBuilder($sorting);
+@@ -74,6 +88,10 @@ class RequestBuilderFactory
+         return $requestBuilder;
      }
- 
+
 +    /**
 +     * @param UserRecommendation $recommendation
 +     * @return RecommendationRequestBuilder
 +     */
      public function recommendation(UserRecommendation $recommendation)
      {
-         return $this->createConfiguredBuilder(RecommendationRequestBuilder::class, $recommendation);
+         $requestBuilder = new RecommendationRequestBuilder($recommendation);
+@@ -82,6 +100,9 @@ class RequestBuilderFactory
+         return $requestBuilder;
      }
- 
+
 +    /**
 +     * @return ForgetRequestBuilder
 +     */
      public function forget()
      {
-         return $this->createConfiguredBuilder(ForgetRequestBuilder::class);
+         $requestBuilder = new ForgetRequestBuilder();
+@@ -90,6 +111,9 @@ class RequestBuilderFactory
+         return $requestBuilder;
      }
- 
+
 +    /**
 +     * @return ResetDatabaseRequestBuilder
 +     */
      public function resetDatabase()
      {
-         return $this->createConfiguredBuilder(ResetDatabaseRequestBuilder::class);
+         $requestBuilder = new ResetDatabaseRequestBuilder();

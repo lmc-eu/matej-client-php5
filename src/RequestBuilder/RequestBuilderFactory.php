@@ -21,7 +21,10 @@ class RequestBuilderFactory
 
     public function getItemProperties()
     {
-        return $this->createConfiguredBuilder(ItemPropertiesGetRequestBuilder::class);
+        $requestBuilder = new ItemPropertiesGetRequestBuilder();
+        $this->setupBuilder($requestBuilder);
+
+        return $requestBuilder;
     }
 
     /**
@@ -31,7 +34,10 @@ class RequestBuilderFactory
      */
     public function setupItemProperties()
     {
-        return $this->createConfiguredBuilder(ItemPropertiesSetupRequestBuilder::class);
+        $requestBuilder = new ItemPropertiesSetupRequestBuilder();
+        $this->setupBuilder($requestBuilder);
+
+        return $requestBuilder;
     }
 
     /**
@@ -42,7 +48,10 @@ class RequestBuilderFactory
      */
     public function deleteItemProperties()
     {
-        return $this->createConfiguredBuilder(ItemPropertiesSetupRequestBuilder::class, $shouldDelete = true);
+        $requestBuilder = new ItemPropertiesSetupRequestBuilder($shouldDelete = true);
+        $this->setupBuilder($requestBuilder);
+
+        return $requestBuilder;
     }
 
     /**
@@ -50,7 +59,10 @@ class RequestBuilderFactory
      */
     public function events()
     {
-        return $this->createConfiguredBuilder(EventsRequestBuilder::class);
+        $requestBuilder = new EventsRequestBuilder();
+        $this->setupBuilder($requestBuilder);
+
+        return $requestBuilder;
     }
 
     /**
@@ -58,7 +70,10 @@ class RequestBuilderFactory
      */
     public function campaign()
     {
-        return $this->createConfiguredBuilder(CampaignRequestBuilder::class);
+        $requestBuilder = new CampaignRequestBuilder();
+        $this->setupBuilder($requestBuilder);
+
+        return $requestBuilder;
     }
 
     /**
@@ -67,7 +82,10 @@ class RequestBuilderFactory
      */
     public function sorting(Sorting $sorting)
     {
-        return $this->createConfiguredBuilder(SortingRequestBuilder::class, $sorting);
+        $requestBuilder = new SortingRequestBuilder($sorting);
+        $this->setupBuilder($requestBuilder);
+
+        return $requestBuilder;
     }
 
     /**
@@ -76,7 +94,10 @@ class RequestBuilderFactory
      */
     public function recommendation(UserRecommendation $recommendation)
     {
-        return $this->createConfiguredBuilder(RecommendationRequestBuilder::class, $recommendation);
+        $requestBuilder = new RecommendationRequestBuilder($recommendation);
+        $this->setupBuilder($requestBuilder);
+
+        return $requestBuilder;
     }
 
     /**
@@ -84,7 +105,10 @@ class RequestBuilderFactory
      */
     public function forget()
     {
-        return $this->createConfiguredBuilder(ForgetRequestBuilder::class);
+        $requestBuilder = new ForgetRequestBuilder();
+        $this->setupBuilder($requestBuilder);
+
+        return $requestBuilder;
     }
 
     /**
@@ -92,15 +116,14 @@ class RequestBuilderFactory
      */
     public function resetDatabase()
     {
-        return $this->createConfiguredBuilder(ResetDatabaseRequestBuilder::class);
-    }
-
-    private function createConfiguredBuilder($builderClass, ...$args)
-    {
-        /** @var AbstractRequestBuilder $requestBuilder */
-        $requestBuilder = new $builderClass(...$args);
-        $requestBuilder->setRequestManager($this->requestManager);
+        $requestBuilder = new ResetDatabaseRequestBuilder();
+        $this->setupBuilder($requestBuilder);
 
         return $requestBuilder;
+    }
+
+    private function setupBuilder(AbstractRequestBuilder $requestBuilder)
+    {
+        $requestBuilder->setRequestManager($this->requestManager);
     }
 }
