@@ -1,7 +1,7 @@
 language: php
 
 php:
-  - 5.6
+  - '5.6'
 
 env:
   - DEPENDENCIES=""
@@ -9,7 +9,7 @@ env:
 
 matrix:
   include:
-    - php: 5.6
+    - name: 'Codestyle check'
       env: CHECK_CODESTYLE=1
       before_install: phpenv config-rm xdebug.ini
       script: composer all
