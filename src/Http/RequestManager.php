@@ -112,6 +112,7 @@ class RequestManager
     protected function createHttpRequestFromMatejRequest(Request $request)
     {
         $requestBody = json_encode($request->getData());
+        // TODO: use \Safe\json_encode
         $uri = $this->buildBaseUrl() . $request->getPath();
 
         return $this->getMessageFactory()->createRequest($request->getMethod(), $uri, ['Content-Type' => 'application/json', static::REQUEST_ID_HEADER => $request->getRequestId()], $requestBody);

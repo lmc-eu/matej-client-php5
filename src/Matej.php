@@ -11,7 +11,7 @@ use Lmc\Matej\RequestBuilder\RequestBuilderFactory;
 class Matej
 {
     const CLIENT_ID = 'php5-client';
-    const VERSION = '2.3.1';
+    const VERSION = '2.3.2';
     /** @var string */
     private $accountId;
     /** @var string */

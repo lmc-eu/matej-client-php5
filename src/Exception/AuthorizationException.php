@@ -10,12 +10,11 @@ use Psr\Http\Message\ResponseInterface;
  */
 class AuthorizationException extends RequestException
 {
-    /** @return static */
     public static function fromRequestAndResponse(RequestInterface $request, ResponseInterface $response, \Throwable $previous = null)
     {
         $responseData = json_decode($response->getBody()->getContents());
         $message = sprintf('Matej API authorization error for url "%s"%s', $request->getRequestTarget(), isset($responseData->message) ? ' (' . $responseData->message . ')' : '');
 
-        return new static($message, $request, $response, $previous);
+        return new self($message, $request, $response, $previous);
     }
 }
