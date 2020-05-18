@@ -1,20 +1,5 @@
 diff --git b/src/Model/Command/Interaction.php a/src/Model/Command/Interaction.php
 index 7a606b3..1578502 100644
---- b/src/Model/Command/Interaction.php
-+++ a/src/Model/Command/Interaction.php
-@@ -135,8 +135,12 @@ class Interaction extends AbstractCommand implements UserAwareInterface
-         $this->itemId = $itemId;
-     }
-
-+    /**
-+     * @param float $value
-+     */
-     protected function setValue($value)
-     {
-+        Assertion::float($value);
-         Assertion::between($value, 0, 1);
-         $this->value = $value;
-     }
 @@ -147,8 +151,12 @@ class Interaction extends AbstractCommand implements UserAwareInterface
          $this->context = $context;
      }
@@ -29,45 +14,51 @@ index 7a606b3..1578502 100644
          $this->timestamp = $timestamp;
      }
 diff --git b/src/Model/Command/UserRecommendation.php a/src/Model/Command/UserRecommendation.php
-index 8b4f50f..59e98a1 100644
 --- b/src/Model/Command/UserRecommendation.php
 +++ a/src/Model/Command/UserRecommendation.php
-@@ -124,8 +124,12 @@ class UserRecommendation extends AbstractCommand implements UserAwareInterface
-         $this->userId = $userId;
-     }
+@@ -166,10 +166,11 @@
+      * By default user won't see any items, that it has visited (and we have recorded DetailView  interaction.)
+      * If you want to circumvent this, and get recommendations including the ones, that the user has already visited,
+      * you can set the "seen" allowance here.
+-     * @param mixed $seen
++     * @param bool $seen
+      */
+     public function setAllowSeen($seen)
+     {
++        Assertion::boolean($seen);
+         $this->allowSeen = $seen;
 
-+    /**
+         return $this;
+@@ -210,11 +211,12 @@
+      * Set number of requested recommendations. The real number of recommended items could be lower or even zero when
+      * there are no items relevant for the user.
+      *
+-     * @param mixed $count
 +     * @param int $count
-+     */
-     protected function setCount($count)
+      * @return $this
+      */
+     public function setCount($count)
      {
 +        Assertion::integer($count);
          Assertion::greaterThan($count, 0);
          $this->count = $count;
-     }
-@@ -136,14 +140,22 @@ class UserRecommendation extends AbstractCommand implements UserAwareInterface
-         $this->scenario = $scenario;
-     }
 
-+    /**
-+     * @param float $rotationRate
-+     */
-     protected function setRotationRate($rotationRate)
+@@ -229,6 +231,7 @@
+      */
+     public function setRotationRate($rotationRate)
      {
 +        Assertion::float($rotationRate);
          Assertion::between($rotationRate, 0, 1);
          $this->rotationRate = $rotationRate;
-     }
 
-+    /**
-+     * @param int $rotationTime
-+     */
-     protected function setRotationTime($rotationTime)
+@@ -244,6 +247,7 @@
+      */
+     public function setRotationTime($rotationTime)
      {
 +        Assertion::integer($rotationTime);
          Assertion::greaterOrEqualThan($rotationTime, 0);
          $this->rotationTime = $rotationTime;
-     }
+
 diff --git b/src/RequestBuilder/RequestBuilderFactory.php a/src/RequestBuilder/RequestBuilderFactory.php
 index f410a97..2f6ccf2 100644
 --- a/src/RequestBuilder/RequestBuilderFactory.php
