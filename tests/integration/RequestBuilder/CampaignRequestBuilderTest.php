@@ -29,7 +29,7 @@ class CampaignRequestBuilderTest extends IntegrationTestCase
 
     private function createRecommendationCommand($letter)
     {
-        return UserRecommendation::create('user-' . $letter, 1, 'integration-test-scenario', 1, 3600);
+        return UserRecommendation::create('user-' . $letter, 'integration-test-scenario')->setCount(1)->setRotationRate(1)->setRotationTime(3600);
     }
 
     private function createSortingCommand($letter)

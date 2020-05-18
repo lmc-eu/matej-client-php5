@@ -3,6 +3,7 @@
 namespace Lmc\Matej\IntegrationTests\RequestBuilder;
 
 use Lmc\Matej\IntegrationTests\IntegrationTestCase;
+use Lmc\Matej\Model\Command\Boost;
 use Lmc\Matej\Model\Command\Interaction;
 use Lmc\Matej\Model\Command\UserMerge;
 use Lmc\Matej\Model\Command\UserRecommendation;
@@ -18,7 +19,7 @@ class RecommendationRequestBuilderTest extends IntegrationTestCase
     /** @test */
     public function shouldExecuteRecommendationRequestOnly()
     {
-        $response = static::createMatejInstance()->request()->recommendation($this->createRecommendationCommand('user-a'))->send();
+        $response = static::createMatejInstance()->request()->recommendation($this->createRecommendationCommand('user-a')->addBoost(Boost::create('age > 1', 1.2)))->send();
         $this->assertInstanceOf(RecommendationsResponse::class, $response);
         $this->assertResponseCommandStatuses($response, 'SKIPPED', 'SKIPPED', 'OK');
         $this->assertShorthandResponse($response, 'SKIPPED', 'SKIPPED', 'OK');
@@ -27,7 +28,7 @@ class RecommendationRequestBuilderTest extends IntegrationTestCase
     /** @test */
     public function shouldExecuteRecommendationRequestWithUserMergeAndInteraction()
     {
-        $response = static::createMatejInstance()->request()->recommendation($this->createRecommendationCommand('user-b'))->setUserMerge(UserMerge::mergeInto('user-b', 'user-a'))->setInteraction(Interaction::bookmark('user-a', 'item-a'))->send();
+        $response = static::createMatejInstance()->request()->recommendation($this->createRecommendationCommand('user-b'))->setUserMerge(UserMerge::mergeInto('user-b', 'user-a'))->setInteraction(Interaction::withItem('detailview', 'user-a', 'item-a'))->send();
         $this->assertInstanceOf(RecommendationsResponse::class, $response);
         $this->assertResponseCommandStatuses($response, 'OK', 'OK', 'OK');
         $this->assertShorthandResponse($response, 'OK', 'OK', 'OK');
@@ -55,7 +56,7 @@ class RecommendationRequestBuilderTest extends IntegrationTestCase
 
     private function createRecommendationCommand($username)
     {
-        return UserRecommendation::create($username, 5, 'integration-test-scenario', 0.5, 3600);
+        return UserRecommendation::create($username, 'integration-test-scenario')->setCount(5)->setRotationRate(0.5)->setRotationTime(3600);
     }
 
     private function assertShorthandResponse(RecommendationsResponse $response, $interactionStatus, $userMergeStatus, $recommendationStatus)

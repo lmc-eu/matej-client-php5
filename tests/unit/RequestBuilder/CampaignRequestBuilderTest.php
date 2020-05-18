@@ -22,9 +22,9 @@ class CampaignRequestBuilderTest extends TestCase
     public function shouldBuildRequestWithCommands()
     {
         $builder = new CampaignRequestBuilder();
-        $recommendationCommand1 = UserRecommendation::create('userId1', 1, 'scenario1', 1.0, 600);
-        $recommendationCommand2 = UserRecommendation::create('userId2', 2, 'scenario2', 0.5, 700);
-        $recommendationCommand3 = UserRecommendation::create('userId3', 3, 'scenario3', 0.0, 800);
+        $recommendationCommand1 = UserRecommendation::create('userId1', 'scenario1')->setCount(1)->setRotationRate(1.0)->setRotationTime(600);
+        $recommendationCommand2 = UserRecommendation::create('userId2', 'scenario2')->setCount(2)->setRotationRate(0.5)->setRotationTime(700);
+        $recommendationCommand3 = UserRecommendation::create('userId3', 'scenario3')->setCount(3)->setRotationRate(0.0)->setRotationTime(800);
         $builder->addRecommendation($recommendationCommand1);
         $builder->addRecommendations([$recommendationCommand2, $recommendationCommand3]);
         $sortingCommand1 = Sorting::create('userId1', ['itemId1', 'itemId2']);
@@ -62,7 +62,7 @@ class CampaignRequestBuilderTest extends TestCase
     {
         $builder = new CampaignRequestBuilder();
         for ($i = 0; $i < 501; $i++) {
-            $builder->addRecommendation(UserRecommendation::create('userId1', 1, 'scenario1', 1.0, 600));
+            $builder->addRecommendation(UserRecommendation::create('userId1', 'scenario1')->setCount(1)->setRotationRate(1.0)->setRotationTime(600));
             $builder->addSorting(Sorting::create('userId1', ['itemId1', 'itemId2']));
         }
         $this->expectException(DomainException::class);
@@ -87,7 +87,7 @@ class CampaignRequestBuilderTest extends TestCase
         $requestManagerMock->expects($this->once())->method('sendRequest')->with($this->isInstanceOf(Request::class))->willReturn(new Response(0, 0, 0, 0));
         $builder = new CampaignRequestBuilder();
         $builder->setRequestManager($requestManagerMock);
-        $builder->addRecommendation(UserRecommendation::create('userId1', 1, 'scenario1', 1.0, 3600));
+        $builder->addRecommendation(UserRecommendation::create('userId1', 'scenario1')->setCount(1)->setRotationRate(1.0)->setRotationTime(600));
         $builder->addSorting(Sorting::create('userId1', ['itemId1', 'itemId2']));
         $builder->send();
     }

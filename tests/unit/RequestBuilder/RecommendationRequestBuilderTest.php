@@ -23,9 +23,9 @@ class RecommendationRequestBuilderTest extends TestCase
     /** @test */
     public function shouldBuildRequestWithCommands()
     {
-        $recommendationsCommand = UserRecommendation::create('userId1', 5, 'test-scenario', 0.5, 3600);
+        $recommendationsCommand = UserRecommendation::create('userId1', 'test-scenario')->setCount(5)->setRotationRate(0.5)->setRotationTime(3600);
         $builder = new RecommendationRequestBuilder($recommendationsCommand);
-        $interactionCommand = Interaction::detailView('sourceId1', 'itemId1');
+        $interactionCommand = Interaction::withItem('detailviews', 'sourceId1', 'itemId1');
         $builder->setInteraction($interactionCommand);
         $userMergeCommand = UserMerge::mergeFromSourceToTargetUser('sourceId1', 'userId1');
         $builder->setUserMerge($userMergeCommand);
@@ -46,7 +46,7 @@ class RecommendationRequestBuilderTest extends TestCase
     /** @test */
     public function shouldThrowExceptionWhenSendingCommandsWithoutRequestManager()
     {
-        $recommendationsCommand = UserRecommendation::create('userId1', 5, 'test-scenario', 0.5, 3600);
+        $recommendationsCommand = UserRecommendation::create('userId1', 'test-scenario')->setCount(5)->setRotationRate(0.5)->setRotationTime(3600);
         $builder = new RecommendationRequestBuilder($recommendationsCommand);
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Instance of RequestManager must be set to request builder');
@@ -66,8 +66,8 @@ class RecommendationRequestBuilderTest extends TestCase
     /** @test */
     public function shouldThrowExceptionWhenInteractionIsForUnrelatedUser()
     {
-        $builder = new RecommendationRequestBuilder($recommendationsCommand = UserRecommendation::create('userId1', 5, 'scenario', 0.5, 3600));
-        $builder->setInteraction(Interaction::purchase('different-user', 'itemId1'));
+        $builder = new RecommendationRequestBuilder($recommendationsCommand = UserRecommendation::create('userId1', 'scenario')->setCount(5)->setRotationRate(0.5)->setRotationTime(3600));
+        $builder->setInteraction(Interaction::withItem('purchases', 'different-user', 'itemId1'));
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('User in Interaction command ("different-user") must be the same as user in UserRecommendation command ' . '("userId1")');
         $builder->build();
@@ -76,7 +76,7 @@ class RecommendationRequestBuilderTest extends TestCase
     /** @test */
     public function shouldThrowExceptionWhenMergeIsForUnrelatedUser()
     {
-        $builder = new RecommendationRequestBuilder($recommendationsCommand = UserRecommendation::create('userId1', 5, 'scenario', 0.5, 3600));
+        $builder = new RecommendationRequestBuilder($recommendationsCommand = UserRecommendation::create('userId1', 'scenario')->setCount(5)->setRotationRate(0.5)->setRotationTime(3600));
         $builder->setUserMerge(UserMerge::mergeInto('different-user', 'userId1'));
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('User in UserMerge command ("different-user") must be the same as user in UserRecommendation command' . ' ("userId1")');
@@ -95,9 +95,9 @@ class RecommendationRequestBuilderTest extends TestCase
      */
     public function shouldPassOnCorrectSequenceOfUsersWhenMerging($interactionUser, $sourceUserToBeDeleted, $targetUserId, $recommendationUser)
     {
-        $interactionCommand = Interaction::purchase($interactionUser, 'test-item-id');
+        $interactionCommand = Interaction::withItem('purchases', $interactionUser, 'test-item-id');
         $userMergeCommand = UserMerge::mergeFromSourceToTargetUser($sourceUserToBeDeleted, $targetUserId);
-        $recommendationsCommand = UserRecommendation::create($recommendationUser, 5, 'scenario', 0.5, 3600);
+        $recommendationsCommand = UserRecommendation::create($recommendationUser, 'scenario')->setCount(5)->setRotationRate(0.5)->setRotationTime(3600);
         $builder = new RecommendationRequestBuilder($recommendationsCommand);
         $builder->setUserMerge($userMergeCommand);
         $builder->setInteraction($interactionCommand);
@@ -111,9 +111,9 @@ class RecommendationRequestBuilderTest extends TestCase
      */
     public function shouldFailOnIncorrectSequenceOfUsersWhenMerging()
     {
-        $interactionCommand = Interaction::purchase('test-user-a', 'test-item-id');
+        $interactionCommand = Interaction::withItem('purchases', 'test-user-a', 'test-item-id');
         $userMergeCommand = UserMerge::mergeFromSourceToTargetUser('test-user-b', 'test-user-a');
-        $recommendationsCommand = UserRecommendation::create('test-user-b', 5, 'scenario', 0.5, 3600);
+        $recommendationsCommand = UserRecommendation::create('test-user-b', 'scenario')->setCount(5)->setRotationRate(0.5)->setRotationTime(3600);
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Source user in UserMerge command ("test-user-b") must be the same as user in Interaction command ("test-user-a")');
         $builder = new RecommendationRequestBuilder($recommendationsCommand);

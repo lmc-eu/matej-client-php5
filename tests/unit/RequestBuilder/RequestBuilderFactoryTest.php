@@ -59,7 +59,7 @@ class RequestBuilderFactoryTest extends TestCase
         };
         $voidInit = function ($builder) {
         };
-        $userRecommendation = UserRecommendation::create('user-id', 1, 'test-scenario', 0.5, 3600);
+        $userRecommendation = UserRecommendation::create('user-id', 'test-scenario')->setCount(5)->setRotationRate(0.5)->setRotationTime(3600);
 
         return ['getItemProperties' => ['getItemProperties', ItemPropertiesGetRequestBuilder::class, $voidInit], 'setupItemProperties' => ['setupItemProperties', ItemPropertiesSetupRequestBuilder::class, $itemPropertiesSetupInit], 'deleteItemProperties' => ['deleteItemProperties', ItemPropertiesSetupRequestBuilder::class, $itemPropertiesSetupInit], 'events' => ['events', EventsRequestBuilder::class, $eventInit], 'campaign' => ['campaign', CampaignRequestBuilder::class, $campaignInit], 'sorting' => ['sorting', SortingRequestBuilder::class, $voidInit, Sorting::create('user-a', ['item-a', 'item-b', 'item-c'])], 'recommendation' => ['recommendation', RecommendationRequestBuilder::class, $voidInit, $userRecommendation], 'forget' => ['forget', ForgetRequestBuilder::class, $forgetInit], 'resetDatabase' => ['resetDatabase', ResetDatabaseRequestBuilder::class, $voidInit]];
     }
