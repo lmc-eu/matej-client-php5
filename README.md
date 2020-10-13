@@ -1,3 +1,9 @@
+# This version is no longer maintained.
+
+This library version was ment to be used with PHP 5.6/7.0. However, these versions of PHP reached [official end of life](https://www.php.net/supported-versions.php) in January 2019.
+
+Following this, this library will not receive further updates. Upgrade to [matej-client-php][original] (requires PHP 7.1+) as soon as possible.
+
 # PHP 5.6/7.0 compatible API Client for Matej recommendation engine
 
 [![Latest Stable Version](https://img.shields.io/packagist/v/lmc/matej-client-php5.svg?style=flat-square)](https://packagist.org/packages/lmc/matej-client-php5)
